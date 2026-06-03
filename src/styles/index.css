@@ -1,0 +1,52 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+:root {
+  --daytrack-accent: #60a5fa;
+  --daytrack-radius: 16px;
+  --daytrack-font-size: 16px;
+}
+
+[data-daytrack-theme='dark'] body {
+  background: #111827;
+}
+
+[data-daytrack-theme='dark'] .bg-white,
+[data-daytrack-theme='dark'] .bg-white\/80,
+[data-daytrack-theme='dark'] .bg-white\/60 {
+  background-color: rgba(31, 41, 55, 0.92) !important;
+}
+
+[data-daytrack-theme='dark'] .text-gray-800,
+[data-daytrack-theme='dark'] .text-gray-700 {
+  color: #f9fafb !important;
+}
+
+[data-daytrack-theme='dark'] .text-gray-600,
+[data-daytrack-theme='dark'] .text-gray-500 {
+  color: #d1d5db !important;
+}
+
+[data-daytrack-theme='dark'] .border-gray-100,
+[data-daytrack-theme='dark'] .border-gray-200 {
+  border-color: rgba(75, 85, 99, 0.8) !important;
+}
+
+[data-daytrack-compact='true'] .px-6 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+[data-daytrack-compact='true'] .py-6 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+[data-daytrack-compact='true'] .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem !important;
+}
+
+[data-daytrack-compact='true'] .p-6 {
+  padding: 1rem !important;
+}

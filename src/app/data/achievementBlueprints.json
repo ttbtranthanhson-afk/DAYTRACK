@@ -1,0 +1,41 @@
+{
+  "groups": [
+    {
+      "id": "1",
+      "title": "Bậc thầy học tập",
+      "description": "Thành tựu học tập, môn học và phiên ôn luyện",
+      "keywords": ["toán", "vật lý", "hóa", "tiếng anh", "học", "ôn", "bài"]
+    },
+    {
+      "id": "2",
+      "title": "Nhà vô địch kiên trì",
+      "description": "Thành tựu chuỗi ngày và thói quen lặp lại",
+      "keywords": ["mỗi ngày", "thói quen", "chuỗi", "duy trì", "sáng"]
+    },
+    {
+      "id": "3",
+      "title": "Cuộc sống cân bằng",
+      "description": "Thành tựu nghỉ ngơi, vận động, ăn uống và phục hồi",
+      "keywords": ["ăn", "nghỉ", "gym", "chạy", "bơi", "thư giãn", "ngủ"]
+    },
+    {
+      "id": "4",
+      "title": "Kẻ nghiền nát nhiệm vụ",
+      "description": "Thành tựu tạo, xử lý và hoàn thành nhiệm vụ",
+      "keywords": ["task", "nhiệm vụ", "deadline", "hoàn thành", "làm"]
+    },
+    {
+      "id": "5",
+      "title": "Bậc thầy tập trung",
+      "description": "Thành tựu bộ đếm, phiên focus và làm việc sâu",
+      "keywords": ["tập trung", "focus", "pomodoro", "làm việc", "deep work"]
+    }
+  ],
+  "templates": [
+    { "id": "study-session", "groupId": "1", "title": "AI dựng lộ trình học cho {topic}", "progress": 35 },
+    { "id": "streak-plan", "groupId": "2", "title": "Chuỗi mới: duy trì {topic}", "progress": 20 },
+    { "id": "balance-plan", "groupId": "3", "title": "Cân bằng ngày với {topic}", "progress": 25 },
+    { "id": "task-plan", "groupId": "4", "title": "AI chia nhỏ nhiệm vụ: {topic}", "progress": 30 },
+    { "id": "focus-plan", "groupId": "5", "title": "Phiên tập trung cho {topic}", "progress": 15 }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "logos": [
+    { "id": "star", "label": "Study star", "groupId": "1", "lucideIcon": "Star", "tone": "yellow" },
+    { "id": "zap", "label": "Consistency bolt", "groupId": "2", "lucideIcon": "Zap", "tone": "purple" },
+    { "id": "heart", "label": "Balance heart", "groupId": "3", "lucideIcon": "Heart", "tone": "rose" },
+    { "id": "target", "label": "Task target", "groupId": "4", "lucideIcon": "Target", "tone": "blue" },
+    { "id": "trend", "label": "Focus trend", "groupId": "5", "lucideIcon": "TrendingUp", "tone": "green" }
+  ],
+  "components": [
+    { "id": "progress-ring", "label": "Progress ring", "useFor": ["progress", "focus"] },
+    { "id": "check-badge", "label": "Check badge", "useFor": ["task", "completed"] },
+    { "id": "streak-flame", "label": "Streak marker", "useFor": ["habit", "streak"] },
+    { "id": "calendar-chip", "label": "Calendar chip", "useFor": ["schedule", "planning"] },
+    { "id": "sparkle-seed", "label": "AI sparkle", "useFor": ["ai-generated", "suggestion"] }
+  ]
+}
