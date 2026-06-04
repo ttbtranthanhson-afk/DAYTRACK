@@ -37,8 +37,8 @@ export interface Task {
   scheduleId?: string;
 }
 
-// Shared type for calendar schedules keyed by day-of-month (1-31)
-export type CalendarSchedules = Record<number, ScheduleBlock[]>;
+// Shared type for calendar schedules keyed by date string (YYYY-MM-DD)
+export type CalendarSchedules = Record<string, ScheduleBlock[]>;
 
 const initialWeeklySchedule: Record<string, ScheduleBlock[]> = {
   'Thứ Hai': [
@@ -158,20 +158,57 @@ function AppContent() {
   };
 
   const handleApplyWeeklySchedule = (weeklySchedule: Record<string, ScheduleBlock[]>) => {
-    // Generate dates for current month (May 2026 based on mock data)
+    // Generate dates for current month
     const newSchedules = { ...calendarSchedules };
     const dayMap = { 'Chủ Nhật': 0, 'Thứ Hai': 1, 'Thứ Ba': 2, 'Thứ Tư': 3, 'Thứ Năm': 4, 'Thứ Sáu': 5, 'Thứ Bảy': 6 };
     
-    // Simplistic mapping: just map the current 31 days to weekdays based on 2026-05 (May 1st is Friday)
-    // May 1 = Friday (5)
-    for (let day = 1; day <= 31; day++) {
-      const weekDayIndex = (day + 4) % 7; // May 1 is Friday (5). 1+4=5
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0-indexed
+    const numDays = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= numDays; day++) {
+      const date = new Date(year, month, day);
+      const weekDayIndex = date.getDay();
       const weekDayStr = Object.keys(dayMap).find(k => (dayMap as any)[k] === weekDayIndex);
+      const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       if (weekDayStr && weeklySchedule[weekDayStr]) {
-        newSchedules[day] = [...weeklySchedule[weekDayStr]];
+        newSchedules[dateKey] = [...weeklySchedule[weekDayStr]];
       }
     }
     handleUpdateCalendarSchedules(newSchedules);
+
+    // Sync all tasks from the weekly schedule to globalTasks
+    const newTasks: Task[] = [];
+    Object.entries(weeklySchedule).forEach(([dayName, blocks]) => {
+      blocks.forEach(block => {
+        if (block.tasks && block.tasks.length > 0) {
+          const taskScheduleId = block.id || `${dayName}-${block.title}`;
+          block.tasks.forEach(taskTitle => {
+            newTasks.push({
+              id: `${taskScheduleId}-${Date.now()}-${Math.random()}`,
+              title: taskTitle,
+              priority: 'medium',
+              completed: false,
+              dueDate: dayName,
+              source: 'schedule',
+              scheduleName: block.title,
+              scheduleId: taskScheduleId,
+            });
+          });
+        }
+      });
+    });
+
+    if (newTasks.length > 0) {
+      const scheduleIdsToOverwrite = new Set(newTasks.map(t => t.scheduleId));
+      const updatedTasks = [
+        ...globalTasks.filter(task => !task.scheduleId || !scheduleIdsToOverwrite.has(task.scheduleId)),
+        ...newTasks,
+      ];
+      setGlobalTasks(updatedTasks);
+      localStorage.setItem('daytrack_tasks', JSON.stringify(updatedTasks));
+    }
   };
 
   const showBottomNav = isLoggedIn;

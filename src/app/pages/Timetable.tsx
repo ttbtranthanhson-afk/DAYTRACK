@@ -64,7 +64,7 @@ interface TimetableProps {
   weeklySchedules?: Record<string, ScheduleBlock[]>;
   onUpdateWeeklySchedules?: (schedules: Record<string, ScheduleBlock[]>) => void;
   onAddTasks?: (tasks: string[], scheduleName: string, day: string, understandHowTo?: boolean, scheduleId?: string) => void;
-  calendarSchedules?: Record<number, ScheduleBlock[]>;
+  calendarSchedules?: Record<string, ScheduleBlock[]>;
   onApplyWeeklySchedule?: (weeklySchedule: Record<string, ScheduleBlock[]>) => void;
   specialDayNotes?: Record<string, string>;
   onUpdateSpecialDayNote?: (dateKey: string, content: string) => void;
@@ -542,6 +542,9 @@ export function Timetable({
         onComplete={(weeklySchedule) => {
           if (onApplyWeeklySchedule) {
             onApplyWeeklySchedule(weeklySchedule);
+          }
+          if (onUpdateWeeklySchedules) {
+            onUpdateWeeklySchedules(weeklySchedule);
           }
           onGenerateAchievements?.({
             source: 'schedule',

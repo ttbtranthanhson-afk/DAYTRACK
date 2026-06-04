@@ -35,11 +35,15 @@ const isTaskForToday = (task: Task) => {
   if (!task.dueDate) return false;
   const dueDate = task.dueDate.toLowerCase();
   const today = getTodayParts();
+  const daysOfWeek = ['chủ nhật', 'thứ hai', 'thứ ba', 'thứ tư', 'thứ năm', 'thứ sáu', 'thứ bảy'];
+  const todayIndex = new Date().getDay();
+  const todayDayName = daysOfWeek[todayIndex];
   return (
     dueDate.includes('hôm nay') ||
     dueDate.includes(today.iso) ||
     dueDate.includes(`${today.day} tháng ${today.month}`) ||
-    dueDate.includes(`${today.day}/${today.month}`)
+    dueDate.includes(`${today.day}/${today.month}`) ||
+    dueDate.includes(todayDayName)
   );
 };
 
@@ -66,7 +70,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
     }
     setTitle(editingTask?.title ?? '');
     setPriority(editingTask?.priority ?? 'medium');
-    setDueDate(editingTask?.dueDate ?? '');
+    setDueDate(editingTask?.dueDate ?? (activeTab === 'today' ? 'Hôm nay' : ''));
   }, [isTaskModalOpen, editingTask]);
 
   const persistTasks = (updatedTasks: Task[]) => {
@@ -243,22 +247,24 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
           )}
         </div>
 
-        <div className="space-y-3 mb-20">
-          <button
-            onClick={openCreateTask}
-            className="w-full mt-6 border-2 border-dashed border-orange-300 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-orange-500 hover:bg-orange-50/50 transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-            <span className="text-sm font-medium">Tạo nhiệm vụ mới</span>
-          </button>
-          <button
-            onClick={handleAISuggestTasks}
-            className="w-full mt-2 bg-yellow-100 hover:bg-yellow-200 rounded-xl p-4 flex items-center justify-center gap-2 text-yellow-700 transition-colors shadow-sm"
-          >
-            <Sparkles className="w-5 h-5" />
-            <span className="text-sm font-medium">AI gợi ý nhiệm vụ hôm nay</span>
-          </button>
-        </div>
+        {activeTab !== 'complete' && (
+          <div className="space-y-3 mb-20">
+            <button
+              onClick={openCreateTask}
+              className="w-full mt-6 border-2 border-dashed border-orange-300 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-orange-500 hover:bg-orange-50/50 transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              <span className="text-sm font-medium">Tạo nhiệm vụ mới</span>
+            </button>
+            <button
+              onClick={handleAISuggestTasks}
+              className="w-full mt-2 bg-yellow-100 hover:bg-yellow-200 rounded-xl p-4 flex items-center justify-center gap-2 text-yellow-700 transition-colors shadow-sm"
+            >
+              <Sparkles className="w-5 h-5" />
+              <span className="text-sm font-medium">AI gợi ý nhiệm vụ hôm nay</span>
+            </button>
+          </div>
+        )}
       </div>
 
       <AITaskSuggestionModal 
