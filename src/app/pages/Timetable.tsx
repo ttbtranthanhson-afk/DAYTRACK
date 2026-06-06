@@ -239,15 +239,15 @@ export function Timetable({
   };
 
   return (
-    <PageContainer className="bg-gradient-to-b from-blue-50/30 to-white">
+    <PageContainer className="bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/20 dark:to-[#1A1B1E]">
       {/* Header */}
-      <div className="sticky top-0 bg-white/80 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100">
+      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl text-blue-600 mb-1">
+            <h1 className="text-2xl text-blue-600 dark:text-blue-400 mb-1 transition-colors">
               {isTodayMode ? 'Hôm nay' : 'Lịch trình'}
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors">
               {isTodayMode ? 'Lịch trình được AI tối ưu cho bạn' : 'Lịch trình tuần của bạn'}
             </p>
           </div>
@@ -259,7 +259,7 @@ export function Timetable({
             className={`p-3 rounded-xl transition-all ${
               isTodayMode
                 ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 dark:bg-[#2C2E33] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#373A40]'
             }`}
           >
             {isTodayMode ? <Calendar className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
@@ -287,15 +287,15 @@ export function Timetable({
                   <div className="flex items-center justify-between mb-6">
                     <button
                       onClick={goToPreviousDay}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-30"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors disabled:opacity-30"
                       disabled={currentDayIndex === 0}
                     >
                       <ChevronLeft className="w-6 h-6 text-gray-600" />
                     </button>
-                    <h2 className="text-xl text-gray-800">{currentDay}</h2>
+                    <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">{currentDay}</h2>
                     <button
                       onClick={goToNextDay}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors"
                     >
                       <ChevronRight className="w-6 h-6 text-gray-600" />
                     </button>
@@ -309,7 +309,7 @@ export function Timetable({
                         className={`h-1.5 rounded-full transition-all ${
                           index === currentDayIndex
                             ? 'w-8 bg-blue-400'
-                            : 'w-1.5 bg-gray-200'
+                            : 'w-1.5 bg-gray-200 dark:bg-gray-600'
                         }`}
                       />
                     ))}
@@ -321,10 +321,10 @@ export function Timetable({
               {isTodayMode && (
                 <div className="mb-6 space-y-4">
                   <div>
-                    <h2 className="text-xl text-gray-800">
+                    <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">
                       {todayInfo.dayName}, {todayInfo.dayOfMonth} tháng {todayInfo.month}
                     </h2>
-                    <p className="text-sm text-gray-500 mt-1">Lịch học hôm nay theo thời gian thực</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Lịch học hôm nay theo thời gian thực</p>
                   </div>
                   
                   {onUpdateSpecialDayNote && (
@@ -440,7 +440,7 @@ export function Timetable({
               {!isTodayMode && (
                 <button
                   onClick={handleOpenCreate}
-                  className="w-full mt-6 border-2 border-dashed border-blue-200 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-blue-400 hover:bg-blue-50/50 transition-colors"
+                  className="w-full mt-6 border-2 border-dashed border-blue-200 dark:border-blue-800/50 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors"
                 >
                   <Plus className="w-5 h-5" />
                   <span>Tạo khối lịch trình mới</span>
@@ -463,28 +463,28 @@ export function Timetable({
               <div className="flex items-center justify-between mb-6">
                 <button
                   onClick={goToPreviousDay}
-                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors"
                 >
                   <ChevronLeft className="w-6 h-6 text-gray-600" />
                 </button>
-                <h2 className="text-xl text-gray-800">Tổng kết tuần</h2>
+                <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">Tổng kết tuần</h2>
                 <div className="w-10" />
               </div>
 
-              <div className="bg-blue-100 rounded-3xl p-6 mb-6">
-                <h3 className="text-lg mb-4 text-blue-900">Tổng quan tuần</h3>
+              <div className="bg-blue-100 dark:bg-blue-900/20 dark:border dark:border-blue-800/30 rounded-3xl p-6 mb-6 transition-colors">
+                <h3 className="text-lg mb-4 text-blue-900 dark:text-blue-300">Tổng quan tuần</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-blue-500">Tổng số lớp</span>
-                    <span className="font-medium text-blue-900">12</span>
+                    <span className="text-blue-500 dark:text-blue-400">Tổng số lớp</span>
+                    <span className="font-medium text-blue-900 dark:text-blue-300">12</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-blue-500">Giờ học</span>
-                    <span className="font-medium text-blue-900">24h</span>
+                    <span className="text-blue-500 dark:text-blue-400">Giờ học</span>
+                    <span className="font-medium text-blue-900 dark:text-blue-300">24h</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-blue-500">Ngày rảnh</span>
-                    <span className="font-medium text-blue-900">2</span>
+                    <span className="text-blue-500 dark:text-blue-400">Ngày rảnh</span>
+                    <span className="font-medium text-blue-900 dark:text-blue-300">2</span>
                   </div>
                 </div>
               </div>
@@ -504,9 +504,9 @@ export function Timetable({
                 <span>Trợ lý AI</span>
               </button>
 
-              <div className="mt-6 bg-blue-50 rounded-2xl p-4">
-                <p className="text-sm text-blue-500">
-                  <strong className="text-blue-700">Gợi ý AI:</strong> Lịch của bạn trông cân bằng! Hãy xem xét thêm
+              <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 dark:border dark:border-blue-800/30 rounded-2xl p-4 transition-colors">
+                <p className="text-sm text-blue-500 dark:text-blue-400">
+                  <strong className="text-blue-700 dark:text-blue-300">Gợi ý AI:</strong> Lịch của bạn trông cân bằng! Hãy xem xét thêm
                   15 phút nghỉ giữa các lớp buổi sáng để tập trung tốt hơn.
                 </p>
               </div>

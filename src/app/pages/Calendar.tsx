@@ -167,29 +167,29 @@ export function Calendar({
   const currentSchedules = calendarSchedules[selectedDateKey] || [];
 
   return (
-    <PageContainer className="bg-gradient-to-b from-purple-50/30 to-white">
+    <PageContainer className="bg-gradient-to-b from-purple-50/30 to-white dark:from-purple-950/20 dark:to-[#1A1B1E]">
       {/* Header */}
-      <div className="sticky top-0 bg-white/80 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100">
-        <h1 className="text-2xl text-purple-600 mb-1">Lịch</h1>
-        <p className="text-sm text-gray-500">Quản lý lịch trình hàng ngày</p>
+      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
+        <h1 className="text-2xl text-purple-600 dark:text-purple-400 mb-1 transition-colors">Lịch</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors">Quản lý lịch trình hàng ngày</p>
       </div>
 
       <div className="px-6 py-6">
         {/* Month Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={() => handleMonthChange('prev')} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          <button onClick={() => handleMonthChange('prev')} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors">
+            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
-          <h2 className="text-lg text-gray-800 font-semibold">Tháng {currentMonth + 1} {currentYear}</h2>
-          <button onClick={() => handleMonthChange('next')} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+          <h2 className="text-lg text-gray-800 dark:text-[#E9ECEF] font-semibold">Tháng {currentMonth + 1} {currentYear}</h2>
+          <button onClick={() => handleMonthChange('next')} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors">
+            <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
 
         {/* Week Days */}
         <div className="grid grid-cols-7 gap-2 mb-3">
           {weekDays.map(day => (
-            <div key={day} className="text-center text-xs text-gray-500 font-medium">
+            <div key={day} className="text-center text-xs text-gray-500 dark:text-gray-400 font-medium">
               {day}
             </div>
           ))}
@@ -214,10 +214,10 @@ export function Calendar({
                 onClick={() => setSelectedDay(day)}
                 className={`aspect-square rounded-xl flex flex-col items-center justify-center transition-all relative ${
                   isSelected
-                    ? 'bg-purple-400 text-white shadow-lg shadow-purple-200'
+                    ? 'bg-purple-400 text-white shadow-lg shadow-purple-200 dark:shadow-purple-950/40'
                     : hasSpecialNote
-                    ? 'bg-yellow-100/80 text-yellow-800 border border-yellow-400 hover:bg-yellow-200 font-medium'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-yellow-100/80 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border border-yellow-400 dark:border-yellow-700/50 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 font-medium'
+                    : 'bg-gray-50 dark:bg-[#2C2E33] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#373A40]'
                 }`}
               >
                 <span className="text-sm">{day}</span>
@@ -225,7 +225,7 @@ export function Calendar({
                   <span className={`w-1.5 h-1.5 rounded-full absolute bottom-1.5 ${isSelected ? 'bg-white' : 'bg-yellow-600'}`} />
                 )}
                 {isLocked && (
-                  <Lock className={`w-2.5 h-2.5 absolute bottom-1 right-1 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+                  <Lock className={`w-2.5 h-2.5 absolute bottom-1 right-1 ${isSelected ? 'text-white' : 'text-gray-400 dark:text-gray-500'}`} />
                 )}
               </button>
             );
@@ -233,15 +233,15 @@ export function Calendar({
         </div>
 
         {/* Selected Day Schedule */}
-        <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 rounded-3xl p-6 mb-4 border border-purple-100/30">
+        <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-950/30 dark:to-pink-950/20 rounded-3xl p-6 mb-4 border border-purple-100/30 dark:border-purple-800/30 transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg text-gray-800">{selectedDay} tháng {currentMonth + 1}, {currentYear}</h3>
+            <h3 className="text-lg text-gray-800 dark:text-[#E9ECEF]">{selectedDay} tháng {currentMonth + 1}, {currentYear}</h3>
             <button
               onClick={() => toggleLock(selectedDay)}
               className={`p-2 rounded-full transition-colors ${
                 isLocked
                   ? 'bg-purple-500 text-white'
-                  : 'bg-purple-1000 text-purple-600'
+                  : 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300'
               }`}
             >
               {isLocked ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
@@ -250,11 +250,11 @@ export function Calendar({
 
           {/* Yellow Special Day Note */}
           {specialDayNotes[selectedDateKey] && (
-            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-4 mb-4 flex items-start gap-3 border border-yellow-200 shadow-sm">
-              <Sparkles className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-950/30 dark:to-amber-950/20 rounded-2xl p-4 mb-4 flex items-start gap-3 border border-yellow-200 dark:border-yellow-800/40 shadow-sm transition-colors">
+              <Sparkles className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
               <div>
-                <strong className="block text-xs text-yellow-800 uppercase tracking-wider mb-0.5">Ngày đặc biệt</strong>
-                <p className="text-sm text-yellow-900 font-medium">
+                <strong className="block text-xs text-yellow-800 dark:text-yellow-300 uppercase tracking-wider mb-0.5">Ngày đặc biệt</strong>
+                <p className="text-sm text-yellow-900 dark:text-yellow-200 font-medium">
                   {specialDayNotes[selectedDateKey]}
                 </p>
               </div>
@@ -262,8 +262,8 @@ export function Calendar({
           )}
 
           {isLocked && (
-            <div className="bg-white/40 rounded-2xl p-3 mb-4 border border-purple-200/50">
-              <p className="text-xs text-purple-600">
+            <div className="bg-white/40 dark:bg-[#2C2E33]/70 rounded-2xl p-3 mb-4 border border-purple-200/50 dark:border-purple-800/40">
+              <p className="text-xs text-purple-600 dark:text-purple-300">
                 Ngày này đã được khóa và sẽ không bị ảnh hưởng bởi các thay đổi lịch trình
               </p>
             </div>
@@ -298,8 +298,8 @@ export function Calendar({
                 </div>
               ))
             ) : (
-              <div className="bg-white/30 rounded-xl p-6 text-center border border-purple-100/30">
-                <p className="text-sm text-gray-500">Không có lịch cho ngày này</p>
+              <div className="bg-white/30 dark:bg-[#2C2E33]/70 rounded-xl p-6 text-center border border-purple-100/30 dark:border-[#373A40]">
+                <p className="text-sm text-gray-500 dark:text-gray-400">Không có lịch cho ngày này</p>
               </div>
             )}
           </div>
@@ -308,7 +308,7 @@ export function Calendar({
           <div className="space-y-3">
             <button
               onClick={handleOpenCreate}
-              className="w-full bg-white/40 hover:bg-white/60 rounded-xl p-3 flex items-center justify-center gap-2 text-purple-600 transition-colors border border-purple-100/30"
+              className="w-full bg-white/40 dark:bg-[#2C2E33]/80 hover:bg-white/60 dark:hover:bg-[#373A40] rounded-xl p-3 flex items-center justify-center gap-2 text-purple-600 dark:text-purple-300 transition-colors border border-purple-100/30 dark:border-purple-800/30"
             >
               <Plus className="w-4 h-4" />
               <span className="text-sm font-medium">Thêm lịch trình</span>
@@ -329,7 +329,7 @@ export function Calendar({
                 });
                 setIsAIModalOpen(true);
               }}
-              className="w-full bg-yellow-100 hover:bg-yellow-200 rounded-xl p-3 flex items-center justify-center gap-2 text-yellow-700 transition-colors shadow-sm"
+              className="w-full bg-yellow-100 dark:bg-yellow-900/30 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 rounded-xl p-3 flex items-center justify-center gap-2 text-yellow-700 dark:text-yellow-300 transition-colors shadow-sm"
             >
               <Sparkles className="w-4 h-4" />
               <span className="text-sm font-medium">AI assistant</span>
@@ -339,8 +339,8 @@ export function Calendar({
 
         {/* Special Days list in this month */}
         {Object.entries(specialDayNotes).some(([key]) => key.startsWith(`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`)) && (
-          <div className="mt-6 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+          <div className="mt-6 bg-white dark:bg-[#2C2E33] rounded-3xl p-6 border border-gray-100 dark:border-[#373A40] shadow-sm transition-colors">
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-[#E9ECEF] mb-3 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-yellow-500" />
               Sự kiện & Ngày đặc biệt tháng {currentMonth + 1}
             </h3>
@@ -354,10 +354,10 @@ export function Calendar({
                       key={key}
                       type="button"
                       onClick={() => setSelectedDay(dayNum)}
-                      className="w-full flex items-center justify-between text-left p-3 rounded-xl hover:bg-gray-50 transition-colors border border-gray-50"
+                      className="w-full flex items-center justify-between text-left p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-[#373A40] transition-colors border border-gray-50 dark:border-[#373A40]"
                     >
-                      <span className="text-sm font-medium text-gray-700">{value}</span>
-                      <span className="text-xs text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full font-medium">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{value}</span>
+                      <span className="text-xs text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/30 px-2.5 py-1 rounded-full font-medium">
                         Ngày {dayNum}
                       </span>
                     </button>

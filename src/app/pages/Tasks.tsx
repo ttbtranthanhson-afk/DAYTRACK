@@ -5,9 +5,9 @@ import { AITaskSuggestionModal } from '../components/AITaskSuggestionModal';
 import type { Task } from '../App';
 
 const priorityColors = {
-  high: 'bg-red-50 text-red-600',
-  medium: 'bg-orange-50 text-orange-600',
-  low: 'bg-blue-50 text-blue-600',
+  high: 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-300 dark:border dark:border-red-800/30',
+  medium: 'bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-300 dark:border dark:border-orange-800/30',
+  low: 'bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-300 dark:border dark:border-blue-800/30',
 };
 
 const priorityLabels = {
@@ -148,21 +148,21 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
   });
 
   return (
-    <PageContainer className="bg-gradient-to-b from-orange-50/30 to-white">
-      <div className="sticky top-0 bg-white/80 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100">
-        <h1 className="text-2xl text-orange-600 mb-1">Nhiệm vụ</h1>
-        <p className="text-sm text-gray-500">Quản lý nhiệm vụ của bạn</p>
+    <PageContainer className="bg-gradient-to-b from-orange-50/30 to-white dark:from-orange-950/20 dark:to-[#1A1B1E]">
+      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
+        <h1 className="text-2xl text-orange-600 dark:text-orange-400 mb-1 transition-colors">Nhiệm vụ</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors">Quản lý nhiệm vụ của bạn</p>
       </div>
 
       <div className="px-6 py-6">
         <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Tìm kiếm nhiệm vụ..."
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-orange-200"
+            className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-[#2C2E33] text-gray-800 dark:text-[#E9ECEF] placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-2xl border border-transparent dark:border-[#373A40] outline-none focus:ring-2 focus:ring-orange-200 dark:focus:ring-orange-800/60 transition-colors"
           />
         </div>
 
@@ -179,8 +179,8 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-2 px-4 rounded-xl transition-all ${
                   activeTab === tab
-                    ? 'bg-orange-400 text-white shadow-lg shadow-orange-200'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    ? 'bg-orange-400 text-white shadow-lg shadow-orange-200 dark:shadow-orange-950/40'
+                    : 'bg-gray-50 dark:bg-[#2C2E33] text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#373A40]'
                 }`}
               >
                 {tabLabels[tab]}
@@ -241,7 +241,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
               </div>
             </button>
           )) : (
-            <div className="bg-gray-50 rounded-2xl p-6 text-center text-sm text-gray-500">
+            <div className="bg-gray-50 dark:bg-[#2C2E33] rounded-2xl p-6 text-center text-sm text-gray-500 dark:text-gray-400 border border-transparent dark:border-[#373A40] transition-colors">
               Không có nhiệm vụ phù hợp
             </div>
           )}
@@ -251,14 +251,14 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
           <div className="space-y-3 mb-20">
             <button
               onClick={openCreateTask}
-              className="w-full mt-6 border-2 border-dashed border-orange-300 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-orange-500 hover:bg-orange-50/50 transition-colors"
+              className="w-full mt-6 border-2 border-dashed border-orange-300 dark:border-orange-800/50 rounded-2xl py-4 px-6 flex items-center justify-center gap-2 text-orange-500 dark:text-orange-300 hover:bg-orange-50/50 dark:hover:bg-orange-900/20 transition-colors"
             >
               <Plus className="w-5 h-5" />
               <span className="text-sm font-medium">Tạo nhiệm vụ mới</span>
             </button>
             <button
               onClick={handleAISuggestTasks}
-              className="w-full mt-2 bg-yellow-100 hover:bg-yellow-200 rounded-xl p-4 flex items-center justify-center gap-2 text-yellow-700 transition-colors shadow-sm"
+              className="w-full mt-2 bg-yellow-100 dark:bg-yellow-900/30 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 rounded-xl p-4 flex items-center justify-center gap-2 text-yellow-700 dark:text-yellow-300 transition-colors shadow-sm"
             >
               <Sparkles className="w-5 h-5" />
               <span className="text-sm font-medium">AI gợi ý nhiệm vụ hôm nay</span>
@@ -275,41 +275,41 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
 
       {isTaskModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-md">
-            <div className="border-b border-gray-100 px-6 py-4 rounded-t-3xl flex items-center justify-between">
+          <div className="bg-white dark:bg-[#25262B] rounded-t-3xl sm:rounded-3xl w-full max-w-md border border-transparent dark:border-[#373A40] transition-colors">
+            <div className="border-b border-gray-100 dark:border-[#373A40] px-6 py-4 rounded-t-3xl flex items-center justify-between">
               <div>
-                <h2 className="text-xl text-gray-800">{editingTask ? 'Chỉnh sửa nhiệm vụ' : 'Tạo nhiệm vụ'}</h2>
-                <p className="text-sm text-gray-500">Bấm lưu để cập nhật danh sách</p>
+                <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">{editingTask ? 'Chỉnh sửa nhiệm vụ' : 'Tạo nhiệm vụ'}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Bấm lưu để cập nhật danh sách</p>
               </div>
-              <button onClick={closeTaskModal} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                <X className="w-5 h-5 text-gray-600" />
+              <button onClick={closeTaskModal} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors">
+                <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               </button>
             </div>
 
             <form onSubmit={handleSubmitTask} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Tên nhiệm vụ</label>
+                <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Tên nhiệm vụ</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-orange-300"
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-[#2C2E33] text-gray-800 dark:text-[#E9ECEF] placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-orange-300 dark:focus:ring-orange-800/60 transition-colors"
                   placeholder="VD: Hoàn thành bài tập toán"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Ngày</label>
+                <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Ngày</label>
                 <input
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-orange-300"
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-[#2C2E33] text-gray-800 dark:text-[#E9ECEF] placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-orange-300 dark:focus:ring-orange-800/60 transition-colors"
                   placeholder="VD: Hôm nay hoặc 24 tháng 5"
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Mức ưu tiên</label>
+                <label className="block text-sm text-gray-600 dark:text-gray-300 mb-2">Mức ưu tiên</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['high', 'medium', 'low'] as const).map(item => (
                     <button
@@ -319,7 +319,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                       className={`py-2 rounded-xl text-sm transition-all ${
                         priority === item
                           ? `${priorityColors[item]} ring-2 ring-orange-300`
-                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                          : 'bg-gray-50 dark:bg-[#2C2E33] text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#373A40]'
                       }`}
                     >
                       {priorityLabels[item]}
@@ -333,7 +333,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                   <button
                     type="button"
                     onClick={() => setShowSingleAISuggestion(!showSingleAISuggestion)}
-                    className="w-full flex items-center justify-between p-3 rounded-xl bg-yellow-50 text-yellow-700 border border-yellow-100"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 border border-yellow-100 dark:border-yellow-800/40"
                   >
                     <span className="flex items-center gap-2 text-sm font-medium">
                       <Sparkles className="w-4 h-4" />
@@ -342,18 +342,18 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                     <ChevronDown className={`w-4 h-4 transition-transform ${showSingleAISuggestion ? 'rotate-180' : ''}`} />
                   </button>
                   {showSingleAISuggestion && (
-                    <div className="mt-2 p-4 rounded-xl bg-yellow-50/50 border border-yellow-100 space-y-3 text-sm">
+                    <div className="mt-2 p-4 rounded-xl bg-yellow-50/50 dark:bg-yellow-950/20 border border-yellow-100 dark:border-yellow-800/40 space-y-3 text-sm">
                       <div>
-                        <strong className="block text-yellow-900/80 mb-1">Thời gian thực hiện:</strong>
-                        <p className="text-yellow-800">14:00 - 15:00 (Năng lượng ổn định)</p>
+                        <strong className="block text-yellow-900/80 dark:text-yellow-200 mb-1">Thời gian thực hiện:</strong>
+                        <p className="text-yellow-800 dark:text-yellow-300">14:00 - 15:00 (Năng lượng ổn định)</p>
                       </div>
                       <div>
-                        <strong className="block text-yellow-900/80 mb-1">Cách thực hiện:</strong>
-                        <p className="text-yellow-800">Tập trung làm phần quan trọng nhất trước. Tránh mạng xã hội.</p>
+                        <strong className="block text-yellow-900/80 dark:text-yellow-200 mb-1">Cách thực hiện:</strong>
+                        <p className="text-yellow-800 dark:text-yellow-300">Tập trung làm phần quan trọng nhất trước. Tránh mạng xã hội.</p>
                       </div>
                       <div>
-                        <strong className="block text-yellow-900/80 mb-1">Lý do:</strong>
-                        <p className="text-yellow-800">Thời gian buổi chiều thích hợp cho các việc cần sự tỉ mỉ.</p>
+                        <strong className="block text-yellow-900/80 dark:text-yellow-200 mb-1">Lý do:</strong>
+                        <p className="text-yellow-800 dark:text-yellow-300">Thời gian buổi chiều thích hợp cho các việc cần sự tỉ mỉ.</p>
                       </div>
                     </div>
                   )}
@@ -365,7 +365,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                   <button
                     type="button"
                     onClick={deleteTask}
-                    className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-100 transition-colors"
+                    className="w-12 h-12 bg-red-50 dark:bg-red-950/30 text-red-500 dark:text-red-300 rounded-2xl flex items-center justify-center hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -373,7 +373,7 @@ export function Tasks({ tasks: propTasks, onUpdateTasks, onGenerateAchievements 
                 <button
                   type="button"
                   onClick={closeTaskModal}
-                  className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-2xl hover:bg-gray-200 transition-colors"
+                  className="flex-1 py-3 bg-gray-100 dark:bg-[#2C2E33] text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-200 dark:hover:bg-[#373A40] transition-colors"
                 >
                   Hủy
                 </button>

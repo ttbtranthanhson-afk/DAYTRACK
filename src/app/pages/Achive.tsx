@@ -119,27 +119,27 @@ export function Achive() {
 
   const totalAchievements = groupsWithAI.reduce((sum, group) => sum + group.count, 0);
   return (
-    <PageContainer className="bg-gradient-to-b from-pink-50/30 to-white">
+    <PageContainer className="bg-gradient-to-b from-pink-50/30 to-white dark:from-pink-950/20 dark:to-[#1A1B1E]">
       {/* Header */}
-      <div className="sticky top-0 bg-white/80 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100">
-        <h1 className="text-2xl text-pink-600 mb-1">Thành tựu</h1>
-        <p className="text-sm text-gray-500">Thành tựu và tiến trình của bạn</p>
+      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
+        <h1 className="text-2xl text-pink-600 dark:text-pink-400 mb-1">Thành tựu</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Thành tựu và tiến trình của bạn</p>
       </div>
 
       <div className="px-6 py-6">
         {/* Stats Overview */}
-        <div className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl p-6 mb-6">
+        <div className="bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-950/20 dark:to-purple-950/20 dark:border dark:border-pink-800/30 rounded-3xl p-6 mb-6 transition-colors">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-white/60 flex items-center justify-center">
-              <Award className="w-6 h-6 text-pink-600" />
+            <div className="w-12 h-12 rounded-full bg-white/60 dark:bg-white/10 flex items-center justify-center">
+              <Award className="w-6 h-6 text-pink-600 dark:text-pink-400" />
             </div>
             <div>
-              <h2 className="text-2xl text-gray-800">{totalAchievements}</h2>
-              <p className="text-sm text-gray-600">Tổng số thành tựu</p>
+              <h2 className="text-2xl text-gray-800 dark:text-[#E9ECEF]">{totalAchievements}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Tổng số thành tựu</p>
             </div>
           </div>
-          <div className="bg-white/40 rounded-2xl p-4">
-            <p className="text-sm text-gray-700">
+          <div className="bg-white/40 dark:bg-white/5 rounded-2xl p-4">
+            <p className="text-sm text-gray-700 dark:text-gray-300">
               Tiếp tục phát huy! Bạn đang xây dựng thói quen năng suất lành mạnh.
             </p>
           </div>
@@ -154,11 +154,11 @@ export function Achive() {
             const totalCount = group.subAchievements.length;
 
             return (
-              <div key={group.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div key={group.id} className="bg-white dark:bg-[#2C2E33] rounded-2xl shadow-sm border border-gray-100 dark:border-[#373A40] overflow-hidden transition-colors">
                 {/* Main Achievement Header */}
                 <button
                   onClick={() => toggleExpand(group.id)}
-                  className="w-full p-5 hover:bg-gray-50 transition-colors"
+                  className="w-full p-5 hover:bg-gray-50 dark:hover:bg-[#373A40] transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${group.color} flex items-center justify-center flex-shrink-0 shadow-lg`}>
@@ -166,7 +166,7 @@ export function Achive() {
                     </div>
                     <div className="flex-1 text-left">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-medium text-gray-800">
+                        <h3 className="font-medium text-gray-800 dark:text-[#E9ECEF]">
                           {group.title}
                         </h3>
                         <div className="flex items-center gap-2">
@@ -180,7 +180,7 @@ export function Achive() {
                           )}
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {group.description}
                       </p>
                     </div>
@@ -205,12 +205,12 @@ export function Achive() {
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: -20, opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="bg-gray-50 rounded-xl p-3"
+                            className="bg-gray-50 dark:bg-[#25262B] rounded-xl p-3 transition-colors"
                           >
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-3 flex-1">
                                 <div className={`w-2 h-2 rounded-full ${subAchievement.completed ? 'bg-green-400' : 'bg-gray-300'}`} />
-                                <p className={`text-sm ${subAchievement.completed ? 'text-gray-700' : 'text-gray-600'}`}>
+                                <p className={`text-sm ${subAchievement.completed ? 'text-gray-700 dark:text-gray-200' : 'text-gray-600 dark:text-gray-400'}`}>
                                   {subAchievement.title}
                                 </p>
                               </div>
@@ -221,7 +221,7 @@ export function Achive() {
                             </div>
 
                             {/* Progress Bar */}
-                            <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${subAchievement.progress}%` }}
@@ -245,8 +245,8 @@ export function Achive() {
         </div>
 
         {/* Motivational Message */}
-        <div className="mt-6 bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-5 text-center">
-          <p className="text-sm text-gray-700">
+        <div className="mt-6 bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-950/20 dark:to-purple-950/20 rounded-2xl p-5 text-center transition-colors">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
             🌟 Bạn làm thật tuyệt vời! Hãy tiếp tục tập trung vào năng suất lành mạnh.
           </p>
         </div>

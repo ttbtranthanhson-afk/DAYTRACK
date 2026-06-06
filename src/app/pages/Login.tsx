@@ -135,23 +135,23 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center px-6 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-pink-950/30 flex items-center justify-center px-6 py-10 transition-colors duration-200">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <Logo size={100} />
           </div>
-          <h1 className="text-3xl text-gray-800 mb-2">DayTrack</h1>
-          <p className="text-sm text-gray-500">Năng suất lành mạnh, không áp lực</p>
+          <h1 className="text-3xl text-gray-800 dark:text-[#E9ECEF] mb-2">DayTrack</h1>
+          <p className="text-sm text-gray-500 dark:text-[#ADB5BD]">Năng suất lành mạnh, không áp lực</p>
         </div>
 
-        <div className="flex gap-2 mb-4 bg-white rounded-2xl p-1 shadow-sm">
+        <div className="flex gap-2 mb-4 bg-white dark:bg-[#25262B] rounded-2xl p-1 shadow-sm transition-colors">
           <button
             onClick={() => switchTab('login')}
             className={`flex-1 py-3 rounded-xl transition-all ${
               activeTab === 'login'
                 ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#373A40]'
             }`}
           >
             Đăng nhập
@@ -161,7 +161,7 @@ export function Login({ onLogin }: LoginProps) {
             className={`flex-1 py-3 rounded-xl transition-all ${
               activeTab === 'signup'
                 ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#373A40]'
             }`}
           >
             Đăng ký
@@ -180,14 +180,14 @@ export function Login({ onLogin }: LoginProps) {
         {activeTab === 'login' && (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Email</label>
+              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Email</label>
               <div className="relative">
                 <input
                   type="email"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="email@cuaban.com"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -195,21 +195,21 @@ export function Login({ onLogin }: LoginProps) {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Mật khẩu</label>
+              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Mật khẩu</label>
               <div className="relative">
                 <input
                   type="password"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="Nhập mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
             </div>
 
-            <div className="bg-white/70 rounded-2xl p-3 text-xs text-gray-500 border border-blue-100">
+            <div className="bg-white/70 dark:bg-[#25262B] rounded-2xl p-3 text-xs text-gray-500 dark:text-[#868E96] border border-blue-100 dark:border-[#373A40] transition-colors">
               Tài khoản nhà phát triển có thể đăng nhập trực tiếp bằng email và mật khẩu được cấp.
             </div>
 
@@ -226,14 +226,14 @@ export function Login({ onLogin }: LoginProps) {
         {activeTab === 'signup' && (
           <form onSubmit={handleSignupSubmit} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Tên của bạn *</label>
+              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Tên của bạn *</label>
               <div className="relative">
                 <input
                   type="text"
                   value={signupName}
                   onChange={(e) => setSignupName(e.target.value)}
                   placeholder="Nhập tên của bạn"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -248,7 +248,7 @@ export function Login({ onLogin }: LoginProps) {
                   value={signupEmail}
                   onChange={(e) => setSignupEmail(e.target.value)}
                   placeholder="email@cuaban.com"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -263,7 +263,7 @@ export function Login({ onLogin }: LoginProps) {
                   value={signupPassword}
                   onChange={(e) => setSignupPassword(e.target.value)}
                   placeholder="Tạo mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-pink-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -278,7 +278,7 @@ export function Login({ onLogin }: LoginProps) {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Nhập lại mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-pink-300 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                   required
                 />
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -297,7 +297,7 @@ export function Login({ onLogin }: LoginProps) {
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
                       placeholder="Tuổi của bạn"
-                      className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-300 transition-all"
+                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                     />
                     <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
@@ -311,7 +311,7 @@ export function Login({ onLogin }: LoginProps) {
                       value={job}
                       onChange={(e) => setJob(e.target.value)}
                       placeholder="VD: Sinh viên, Lập trình viên"
-                      className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-purple-300 transition-all"
+                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
                     />
                     <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
@@ -323,7 +323,7 @@ export function Login({ onLogin }: LoginProps) {
                     value={habits}
                     onChange={(e) => setHabits(e.target.value)}
                     placeholder="VD: Học buổi sáng, tập thể dục 3 lần/tuần"
-                    className="w-full px-4 py-3 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-pink-300 transition-all resize-none"
+                    className="w-full px-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all resize-none"
                     rows={3}
                   />
                 </div>
@@ -335,7 +335,7 @@ export function Login({ onLogin }: LoginProps) {
                       value={goals}
                       onChange={(e) => setGoals(e.target.value)}
                       placeholder="VD: Quản lý thời gian tốt hơn, giảm stress, cân bằng công việc và cuộc sống"
-                      className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-orange-300 transition-all resize-none"
+                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-orange-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all resize-none"
                       rows={3}
                     />
                     <Target className="absolute left-4 top-3 w-5 h-5 text-gray-400" />
@@ -353,7 +353,7 @@ export function Login({ onLogin }: LoginProps) {
           </form>
         )}
 
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-6">
           Được tạo ra cho những người muốn quản lý ngày hiệu quả hơn
         </p>
       </div>

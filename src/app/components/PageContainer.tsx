@@ -8,7 +8,7 @@ interface PageContainerProps {
 
 export function PageContainer({ children, className = '', showSettings = true }: PageContainerProps) {
   return (
-    <div className={`min-h-screen bg-white pb-20 ${className}`}>
+    <div className={`min-h-screen bg-white dark:bg-[#1A1B1E] pb-20 transition-colors duration-200 ${className}`}>
       <div className="max-w-md mx-auto h-full relative">
         {children}
       </div>
