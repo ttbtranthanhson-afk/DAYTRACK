@@ -96,7 +96,10 @@ export function Timetable({
   const [showSummary, setShowSummary] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBlock, setEditingBlock] = useState<ScheduleBlock | null>(null);
-  const [isTodayMode, setIsTodayMode] = useState(false);
+  const [isTodayMode, setIsTodayMode] = useState(() => {
+    // Đọc preference từ localStorage - mặc định false nếu chưa từng dùng AI
+    return localStorage.getItem('daytrack_timetable_default_today') === 'true';
+  });
   const [expandedScheduleId, setExpandedScheduleId] = useState<string | null>(null);
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
   const [now, setNow] = useState(new Date());
@@ -264,7 +267,9 @@ export function Timetable({
           </div>
           <button
             onClick={() => {
-              setIsTodayMode(!isTodayMode);
+              const newMode = !isTodayMode;
+              setIsTodayMode(newMode);
+              localStorage.setItem('daytrack_timetable_default_today', String(newMode));
               setShowSummary(false);
             }}
             className={`p-3 rounded-xl transition-all ${
@@ -598,6 +603,7 @@ export function Timetable({
           });
           // Tự động quay về Today mode để xem kết quả
           setIsTodayMode(true);
+          localStorage.setItem('daytrack_timetable_default_today', 'true');
           setShowSummary(false);
           alert('Đã áp dụng lịch trình AI tạo ra vào Calendar tổng!');
         }}
