@@ -5,14 +5,82 @@ interface AIScheduleSuggestionProps {
   scheduleTitle: string;
   scheduleTime: string;
   isTimeFixed?: boolean;
-  understandHowTo?: boolean; // MỚI: ẩn HowToContent khi true
+  understandHowTo?: boolean;
+}
+
+// ─── Parse thời gian "HH:MM - HH:MM" → số phút ──────────────────────────────
+function parseTimeToMinutes(time: string): number {
+  const [h, m] = time.trim().split(':').map(Number);
+  return h * 60 + m;
+}
+
+function formatMinutes(minutes: number): string {
+  const h = Math.floor(minutes / 60) % 24;
+  const m = minutes % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+// Tạo các mốc thời gian gợi ý, giữ nguyên thời lượng gốc
+function generateTimeSuggestions(scheduleTime: string): { label: string; isOriginal: boolean }[] {
+  const parts = scheduleTime.split(' - ');
+  if (parts.length !== 2) return [];
+
+  const startMin = parseTimeToMinutes(parts[0]);
+  const endMin = parseTimeToMinutes(parts[1]);
+  const duration = endMin - startMin;
+  if (duration <= 0) return [];
+
+  // Các mốc bắt đầu gợi ý: -1h, +1h, +2h so với thời gian gốc (trong khoảng 5:00 - 22:00)
+  const offsets = [-60, 60, 120];
+  const suggestions: { label: string; isOriginal: boolean }[] = [
+    { label: `${formatMinutes(startMin)} - ${formatMinutes(endMin)}`, isOriginal: true },
+  ];
+
+  for (const offset of offsets) {
+    const newStart = startMin + offset;
+    const newEnd = newStart + duration;
+    if (newStart >= 5 * 60 && newEnd <= 23 * 60) {
+      suggestions.push({
+        label: `${formatMinutes(newStart)} - ${formatMinutes(newEnd)}`,
+        isOriginal: false,
+      });
+    }
+  }
+
+  return suggestions;
+}
+
+// ─── Component hiển thị thời gian ───────────────────────────────────────────
+function TimeSuggestions({ scheduleTime, accentColor }: { scheduleTime: string; accentColor: string }) {
+  const suggestions = generateTimeSuggestions(scheduleTime);
+  if (suggestions.length === 0) return null;
+
+  return (
+    <div>
+      <p className="text-xs text-gray-500 mb-2">Thời gian gợi ý:</p>
+      <div className="flex flex-wrap gap-2">
+        {suggestions.map((s) => (
+          <button
+            key={s.label}
+            className={`px-3 py-1.5 rounded-lg text-sm ${
+              s.isOriginal
+                ? `${accentColor} font-medium ring-2 ring-offset-1 ring-current`
+                : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            {s.isOriginal ? `${s.label} ★` : s.label}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 mt-1">★ Thời gian bạn đã chọn</p>
+    </div>
+  );
 }
 
 // ─── HowToContent cho chủ đề Ăn uống ───────────────────────────────────────
 function EatingHowToContent() {
   return (
     <>
-      {/* Food Suggestions */}
       <div className="bg-orange-50 rounded-xl p-3">
         <p className="text-sm font-medium text-gray-800 mb-2">Bữa ăn được đề xuất:</p>
         <ul className="space-y-1 text-sm text-gray-700">
@@ -22,8 +90,6 @@ function EatingHowToContent() {
           <li>• Dầu ô liu - 1 tbsp (chất béo lành mạnh)</li>
         </ul>
       </div>
-
-      {/* Explanation */}
       <div className="bg-blue-50 rounded-xl p-3 flex gap-2">
         <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-gray-700">
@@ -39,7 +105,6 @@ function EatingHowToContent() {
 function StudyHowToContent() {
   return (
     <>
-      {/* Study Method */}
       <div className="bg-purple-50 rounded-xl p-3">
         <p className="text-sm font-medium text-gray-800 mb-2">Phương pháp được đề xuất:</p>
         <ul className="space-y-1 text-sm text-gray-700">
@@ -49,8 +114,6 @@ function StudyHowToContent() {
           <li>• Ôn tập tài liệu trong vòng 24 giờ</li>
         </ul>
       </div>
-
-      {/* Posture & Health */}
       <div className="bg-green-50 rounded-xl p-3">
         <p className="text-sm font-medium text-gray-800 mb-2">Mẹo học tập lành mạnh:</p>
         <ul className="space-y-1 text-sm text-gray-700">
@@ -60,13 +123,10 @@ function StudyHowToContent() {
           <li>• Duỗi người và nhìn ra xa màn hình</li>
         </ul>
       </div>
-
-      {/* Explanation */}
       <div className="bg-blue-50 rounded-xl p-3 flex gap-2">
         <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-gray-700">
           Phương pháp này tối đa hóa sự tập trung và ghi nhớ trong khi ngăn ngừa kiệt sức.
-          Nghỉ ngơi thường xuyên giúp duy trì sự tập trung và bảo vệ sức khỏe thể chất.
         </p>
       </div>
     </>
@@ -77,7 +137,6 @@ function StudyHowToContent() {
 function ExerciseHowToContent() {
   return (
     <>
-      {/* Exercise Plan */}
       <div className="bg-green-50 rounded-xl p-3">
         <p className="text-sm font-medium text-gray-800 mb-2">Bài tập hôm nay:</p>
         <ul className="space-y-1 text-sm text-gray-700">
@@ -87,13 +146,10 @@ function ExerciseHowToContent() {
           <li>• Squat - 3 sets 20 lần</li>
         </ul>
       </div>
-
-      {/* Explanation */}
       <div className="bg-blue-50 rounded-xl p-3 flex gap-2">
         <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-gray-700">
           Bài tập này kết hợp cardio và rèn luyện sức mạnh để tăng cơ tối ưu.
-          Các bài tập nhắm vào các nhóm cơ chính trong khi cải thiện sức bền.
         </p>
       </div>
     </>
@@ -102,175 +158,82 @@ function ExerciseHowToContent() {
 
 export function AIScheduleSuggestion({
   scheduleTitle,
-  scheduleTime: _scheduleTime,
+  scheduleTime,
   isTimeFixed = false,
   understandHowTo = false,
 }: AIScheduleSuggestionProps) {
   const getCategory = () => {
     const title = scheduleTitle.toLowerCase();
     if (
-      title.includes('ăn') ||
-      title.includes('bữa') ||
-      title.includes('sáng') ||
-      title.includes('trưa') ||
-      title.includes('tối') ||
-      title.includes('eat') ||
-      title.includes('meal') ||
-      title.includes('breakfast') ||
-      title.includes('lunch') ||
-      title.includes('dinner')
-    ) {
-      return 'eating';
-    } else if (
-      title.includes('tập') ||
-      title.includes('thể dục') ||
-      title.includes('gym') ||
-      title.includes('thể thao') ||
-      title.includes('exercise') ||
-      title.includes('workout') ||
-      title.includes('sport')
-    ) {
-      return 'exercise';
-    } else {
-      return 'study';
-    }
+      title.includes('ăn') || title.includes('bữa') || title.includes('sáng') ||
+      title.includes('trưa') || title.includes('tối') || title.includes('eat') ||
+      title.includes('meal') || title.includes('breakfast') || title.includes('lunch') || title.includes('dinner')
+    ) return 'eating';
+    if (
+      title.includes('tập') || title.includes('thể dục') || title.includes('gym') ||
+      title.includes('thể thao') || title.includes('exercise') || title.includes('workout') || title.includes('sport')
+    ) return 'exercise';
+    return 'study';
   };
 
   const category = getCategory();
 
-  const renderEatingSuggestion = () => (
-    <div className="space-y-4">
-      {/* ── Tiêu đề chủ đề + icon — luôn hiển thị ── */}
-      <div className="flex items-center gap-2 mb-3">
-        <Apple className="w-5 h-5 text-orange-500" />
-        <h4 className="font-medium text-gray-800">Gợi ý dinh dưỡng</h4>
-      </div>
-
-      {/* ── Mục tiêu người dùng — luôn hiển thị ── */}
-      <div>
-        <p className="text-xs text-gray-500 mb-2">Mục tiêu của bạn:</p>
-        <div className="flex gap-2">
-          <button className="px-3 py-1.5 bg-orange-100 text-orange-600 rounded-lg text-sm">
-            Tăng cân
-          </button>
-          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-            Giảm cân
-          </button>
-          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-            Tăng cơ
-          </button>
-        </div>
-      </div>
-
-      {/* ── Thời gian gợi ý / cố định — luôn hiển thị ── */}
-      {!isTimeFixed ? (
-        <div>
-          <p className="text-xs text-gray-500 mb-2">Thời gian gợi ý:</p>
-          <div className="flex gap-2">
-            <button className="px-3 py-1.5 bg-blue-100 text-blue-600 rounded-lg text-sm">
-              16:00 - 17:00
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              16:30 - 17:30
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              17:00 - 18:00
-            </button>
-          </div>
-        </div>
-      ) : (
+  const renderTimeSectionOrFixed = (accentColor: string) => {
+    if (isTimeFixed) {
+      return (
         <div className="flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
           <Lock className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
           <p className="text-xs text-blue-600">Thời gian đã được cố định, AI sẽ không đề xuất thay đổi.</p>
         </div>
-      )}
+      );
+    }
+    return <TimeSuggestions scheduleTime={scheduleTime} accentColor={accentColor} />;
+  };
 
-      {/* ── HowToContent — ẩn khi understandHowTo = true ── */}
+  const renderEatingSuggestion = () => (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Apple className="w-5 h-5 text-orange-500" />
+        <h4 className="font-medium text-gray-800">Gợi ý dinh dưỡng</h4>
+      </div>
+      <div>
+        <p className="text-xs text-gray-500 mb-2">Mục tiêu của bạn:</p>
+        <div className="flex gap-2">
+          <button className="px-3 py-1.5 bg-orange-100 text-orange-600 rounded-lg text-sm">Tăng cân</button>
+          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">Giảm cân</button>
+          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">Tăng cơ</button>
+        </div>
+      </div>
+      {renderTimeSectionOrFixed('bg-orange-100 text-orange-600')}
       {!understandHowTo && <EatingHowToContent />}
     </div>
   );
 
   const renderStudySuggestion = () => (
     <div className="space-y-4">
-      {/* ── Tiêu đề chủ đề + icon — luôn hiển thị ── */}
       <div className="flex items-center gap-2 mb-3">
         <BookOpen className="w-5 h-5 text-purple-500" />
         <h4 className="font-medium text-gray-800">Gợi ý phương pháp học tập</h4>
       </div>
-
-      {/* ── Thời gian gợi ý / cố định — luôn hiển thị ── */}
-      {!isTimeFixed ? (
-        <div>
-          <p className="text-xs text-gray-500 mb-2">Thời gian học gợi ý:</p>
-          <div className="flex gap-2">
-            <button className="px-3 py-1.5 bg-purple-100 text-purple-600 rounded-lg text-sm">
-              16:00 - 17:00
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              16:30 - 17:30
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              17:00 - 18:00
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
-          <Lock className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
-          <p className="text-xs text-blue-600">Thời gian đã được cố định, AI sẽ không đề xuất thay đổi.</p>
-        </div>
-      )}
-
-      {/* ── HowToContent — ẩn khi understandHowTo = true ── */}
+      {renderTimeSectionOrFixed('bg-purple-100 text-purple-600')}
       {!understandHowTo && <StudyHowToContent />}
     </div>
   );
 
   const renderExerciseSuggestion = () => (
     <div className="space-y-4">
-      {/* ── Tiêu đề chủ đề + icon — luôn hiển thị ── */}
       <div className="flex items-center gap-2 mb-3">
         <Dumbbell className="w-5 h-5 text-green-500" />
         <h4 className="font-medium text-gray-800">Gợi ý tập luyện</h4>
       </div>
-
-      {/* ── Mục tiêu người dùng — luôn hiển thị ── */}
       <div>
         <p className="text-xs text-gray-500 mb-2">Mục tiêu của bạn:</p>
         <div className="flex gap-2">
-          <button className="px-3 py-1.5 bg-green-100 text-green-600 rounded-lg text-sm">
-            Tăng cơ
-          </button>
-          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-            Giảm cân
-          </button>
+          <button className="px-3 py-1.5 bg-green-100 text-green-600 rounded-lg text-sm">Tăng cơ</button>
+          <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">Giảm cân</button>
         </div>
       </div>
-
-      {/* ── Thời gian gợi ý / cố định — luôn hiển thị ── */}
-      {!isTimeFixed ? (
-        <div>
-          <p className="text-xs text-gray-500 mb-2">Thời gian gợi ý:</p>
-          <div className="flex gap-2">
-            <button className="px-3 py-1.5 bg-green-100 text-green-600 rounded-lg text-sm">
-              16:00 - 17:00
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              16:30 - 17:30
-            </button>
-            <button className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm">
-              17:00 - 18:00
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
-          <Lock className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
-          <p className="text-xs text-blue-600">Thời gian đã được cố định, AI sẽ không đề xuất thay đổi.</p>
-        </div>
-      )}
-
-      {/* ── HowToContent — ẩn khi understandHowTo = true ── */}
+      {renderTimeSectionOrFixed('bg-green-100 text-green-600')}
       {!understandHowTo && <ExerciseHowToContent />}
     </div>
   );
@@ -291,3 +254,4 @@ export function AIScheduleSuggestion({
     </motion.div>
   );
 }
+
