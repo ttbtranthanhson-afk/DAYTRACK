@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 const team = [
   { name: 'Trần Thanh Sơn', role: 'Trưởng nhóm', avatar: 'S', color: 'from-blue-400 to-purple-400' },
   { name: 'Lương Hà Quân', role: 'Lập trình viên', avatar: 'Q', color: 'from-green-400 to-emerald-400' },
+  { name: 'Nguyễn Vũ Thu Thảo', role: 'Trưởng nhóm nội dung và chiến lược', avatar: 'T', color: 'from-pink-400 to-rose-400' },
 ];
 
 const social = [
@@ -121,7 +122,7 @@ export function About() {
 
         <section>
           <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Đội ngũ</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             {team.map((member) => (
               <motion.div
                 key={member.name}
