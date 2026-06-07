@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, Sparkles, Calendar, Sun, ChevronDown, ChevronUp } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, Plus, Sparkles, Calendar, Sun, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { PageContainer } from '../components/PageContainer';
 import { CreateScheduleModal, type ScheduleSaveData } from '../components/CreateScheduleModal';
 import { AIScheduleSuggestion } from '../components/AIScheduleSuggestion';
@@ -100,6 +100,8 @@ export function Timetable({
   const [expandedScheduleId, setExpandedScheduleId] = useState<string | null>(null);
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
   const [now, setNow] = useState(new Date());
+  const [swipedBlockId, setSwipedBlockId] = useState<string | null>(null);
+  const swipeStartX = useRef<number>(0);
 
   const todayInfo = useMemo(() => getTodayInfo(now), [now]);
 
@@ -238,6 +240,15 @@ export function Timetable({
     navigate('/focus', { state: { initialSeconds: seconds, initialMusicCategory: musicCategory } });
   };
 
+  const handleDeleteBlock = (blockId: string) => {
+    if (!onUpdateWeeklySchedules) return;
+    onUpdateWeeklySchedules({
+      ...weeklySchedules,
+      [currentDay]: (weeklySchedules[currentDay] || []).filter(b => b.id !== blockId),
+    });
+    setSwipedBlockId(null);
+  };
+
   return (
     <PageContainer className="bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/20 dark:to-[#1A1B1E]">
       {/* Header */}
@@ -348,33 +359,68 @@ export function Timetable({
               <div className="space-y-3">
                 {schedule.length > 0 ? (
                   schedule.map((block) => (
-                    <div key={block.id}>
-                      <button
-                        onClick={() => {
-                          if (isTodayMode) {
-                            setExpandedScheduleId(expandedScheduleId === block.id ? null : block.id);
+                    <div key={block.id} className="relative overflow-hidden rounded-2xl">
+                      {/* Nút xóa phía sau (chỉ Timetable mode) */}
+                      {!isTodayMode && (
+                        <div className="absolute inset-y-0 right-0 flex items-center justify-end pr-2 w-20 bg-red-500 rounded-2xl">
+                          <button
+                            onClick={() => handleDeleteBlock(block.id)}
+                            className="flex flex-col items-center justify-center w-14 h-full text-white"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                            <span className="text-[10px] mt-0.5">Xóa</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Block chính — vuốt trái để lộ nút xóa */}
+                      <motion.div
+                        drag={!isTodayMode ? "x" : false}
+                        dragConstraints={{ left: -80, right: 0 }}
+                        dragElastic={0.1}
+                        onDragStart={(_e, info) => { swipeStartX.current = info.point.x; }}
+                        onDragEnd={(_e, info) => {
+                          if (info.offset.x < -40) {
+                            setSwipedBlockId(block.id);
                           } else {
-                            handleOpenEdit(block);
+                            setSwipedBlockId(null);
                           }
                         }}
-                        className={`w-full ${block.color} rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow`}
+                        animate={{ x: swipedBlockId === block.id ? -80 : 0 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        style={{ position: 'relative', zIndex: 1 }}
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="text-left">
-                            <h3 className="font-medium mb-1">{block.title}</h3>
-                            <p className="text-sm opacity-75">{block.time}</p>
-                          </div>
-                          {isTodayMode && (
-                            <div>
-                              {expandedScheduleId === block.id ? (
-                                <ChevronUp className="w-5 h-5 opacity-60" />
-                              ) : (
-                                <ChevronDown className="w-5 h-5 opacity-60" />
-                              )}
+                        <button
+                          onClick={() => {
+                            if (swipedBlockId === block.id) {
+                              setSwipedBlockId(null);
+                              return;
+                            }
+                            if (isTodayMode) {
+                              setExpandedScheduleId(expandedScheduleId === block.id ? null : block.id);
+                            } else {
+                              handleOpenEdit(block);
+                            }
+                          }}
+                          className={`w-full ${block.color} rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="text-left">
+                              <h3 className="font-medium mb-1">{block.title}</h3>
+                              <p className="text-sm opacity-75">{block.time}</p>
                             </div>
-                          )}
-                        </div>
-                      </button>
+                            {isTodayMode && (
+                              <div>
+                                {expandedScheduleId === block.id ? (
+                                  <ChevronUp className="w-5 h-5 opacity-60" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 opacity-60" />
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </button>
+                      </motion.div>
 
                       {/* AI Suggestions & Tasks - Only in Today Mode */}
                       {isTodayMode && (
@@ -403,7 +449,6 @@ export function Timetable({
                                           <div className="w-2 h-2 rounded-full bg-black/30" />
                                           <span className="flex-1">{t}</span>
                                         </div>
-                                        {/* Task Suggestion button (Mock UI) */}
                                         <button
                                           onClick={() => {
                                             onGenerateAchievements?.({

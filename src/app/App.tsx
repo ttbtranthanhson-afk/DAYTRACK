@@ -1,4 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component, type ReactNode } from 'react';
+
+// ErrorBoundary: bắt lỗi runtime để tránh màn hình trắng
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: '' };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: error.message };
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-[#1A1B1E] px-6 text-center gap-4">
+          <p className="text-gray-600 dark:text-gray-300">Có lỗi xảy ra khi tải trang.</p>
+          <p className="text-xs text-gray-400 break-all">{this.state.error}</p>
+          <button
+            onClick={() => { this.setState({ hasError: false, error: '' }); window.history.back(); }}
+            className="px-4 py-2 bg-blue-500 text-white rounded-xl text-sm"
+          >
+            Quay lại
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import { ThemeProvider } from './contexts/ThemeContext';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router';
 import { BottomNav } from './components/BottomNav';
@@ -59,11 +87,8 @@ function AppContent() {
   const [globalTasks, setGlobalTasks] = useState<Task[]>([]);
   const [weeklySchedules, setWeeklySchedules] = useState<Record<string, ScheduleBlock[]>>(initialWeeklySchedule);
   const [calendarSchedules, setCalendarSchedules] = useState<CalendarSchedules>({});
-  const [specialDayNotes, setSpecialDayNotes] = useState<Record<string, string>>({
-    '2026-05-01': 'Quốc tế Lao động',
-    '2026-05-15': 'Ngày Quốc tế Phụ nữ (Mô phỏng)',
-    '2026-05-19': 'Ngày Quốc tế Thiếu nhi (Mô phỏng)',
-  });
+  const [lockedDays, setLockedDays] = useState<Set<string>>(new Set<string>());
+  const [specialDayNotes, setSpecialDayNotes] = useState<Record<string, string>>({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -97,15 +122,45 @@ function AppContent() {
     }
   }, []);
 
+  const getUserKey = (email: string, suffix: string) =>
+    `daytrack_${suffix}_${email.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+
   const handleLogin = (data: UserData) => {
     setUserData(data);
     setIsLoggedIn(true);
     localStorage.setItem('daytrack_user_data', JSON.stringify(data));
+
+    // Load per-user data
+    const email = data.email;
+    const savedTasks = localStorage.getItem(getUserKey(email, 'tasks'));
+    if (savedTasks) setGlobalTasks(JSON.parse(savedTasks));
+    else setGlobalTasks([]);
+
+    const savedWeekly = localStorage.getItem(getUserKey(email, 'weekly_schedules'));
+    if (savedWeekly) setWeeklySchedules(JSON.parse(savedWeekly));
+    else setWeeklySchedules(initialWeeklySchedule);
+
+    const savedCalendar = localStorage.getItem(getUserKey(email, 'calendar_schedules'));
+    if (savedCalendar) setCalendarSchedules(JSON.parse(savedCalendar));
+    else setCalendarSchedules({});
+
+    const savedNotes = localStorage.getItem(getUserKey(email, 'special_day_notes'));
+    if (savedNotes) setSpecialDayNotes(JSON.parse(savedNotes));
+    else setSpecialDayNotes({});
+
+    const savedLockedDays = localStorage.getItem(getUserKey(email, 'locked_days'));
+    if (savedLockedDays) setLockedDays(new Set(JSON.parse(savedLockedDays)));
+    else setLockedDays(new Set<string>());
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserData({ name: '', email: '' });
+    setGlobalTasks([]);
+    setWeeklySchedules(initialWeeklySchedule);
+    setCalendarSchedules({});
+    setSpecialDayNotes({});
+    setLockedDays(new Set());
     localStorage.removeItem('daytrack_user_data');
   };
 
@@ -127,31 +182,32 @@ function AppContent() {
       ...newTasks,
     ];
     setGlobalTasks(updatedTasks);
-    localStorage.setItem('daytrack_tasks', JSON.stringify(updatedTasks));
+    localStorage.setItem(getUserKey(userData.email, 'tasks'), JSON.stringify(updatedTasks));
   };
 
   const handleUpdateWeeklySchedules = (schedules: Record<string, ScheduleBlock[]>) => {
     setWeeklySchedules(schedules);
-    localStorage.setItem('daytrack_weekly_schedules', JSON.stringify(schedules));
+    localStorage.setItem(getUserKey(userData.email, 'weekly_schedules'), JSON.stringify(schedules));
   };
 
   const handleUpdateCalendarSchedules = (schedules: CalendarSchedules) => {
     setCalendarSchedules(schedules);
-    localStorage.setItem('daytrack_calendar_schedules', JSON.stringify(schedules));
+    localStorage.setItem(getUserKey(userData.email, 'calendar_schedules'), JSON.stringify(schedules));
   };
 
   const handleUpdateSpecialDayNotes = (notes: Record<string, string>) => {
     setSpecialDayNotes(notes);
-    localStorage.setItem('daytrack_special_day_notes', JSON.stringify(notes));
+    localStorage.setItem(getUserKey(userData.email, 'special_day_notes'), JSON.stringify(notes));
   };
 
-  const handleNavigateToFocus = (initialSeconds: number, initialMusicCategory: string) => {
-    navigate('/focus', { state: { initialSeconds, initialMusicCategory } });
+  const handleUpdateLockedDays = (locked: Set<string>) => {
+    setLockedDays(locked);
+    localStorage.setItem(getUserKey(userData.email, 'locked_days'), JSON.stringify([...locked]));
   };
 
   const handleUpdateTasks = (tasks: Task[]) => {
     setGlobalTasks(tasks);
-    localStorage.setItem('daytrack_tasks', JSON.stringify(tasks));
+    localStorage.setItem(getUserKey(userData.email, 'tasks'), JSON.stringify(tasks));
   };
 
   const handleGenerateAIAchievements = (context: Parameters<typeof generateAIAchievements>[0]) => {
@@ -159,9 +215,11 @@ function AppContent() {
   };
 
   const handleApplyWeeklySchedule = (weeklySchedule: Record<string, ScheduleBlock[]>) => {
-    // Generate dates for current month
     const newSchedules = { ...calendarSchedules };
-    const dayMap = { 'Chủ Nhật': 0, 'Thứ Hai': 1, 'Thứ Ba': 2, 'Thứ Tư': 3, 'Thứ Năm': 4, 'Thứ Sáu': 5, 'Thứ Bảy': 6 };
+    const dayMap: Record<string, number> = {
+      'Chủ Nhật': 0, 'Thứ Hai': 1, 'Thứ Ba': 2, 'Thứ Tư': 3,
+      'Thứ Năm': 4, 'Thứ Sáu': 5, 'Thứ Bảy': 6,
+    };
     
     const today = new Date();
     const year = today.getFullYear();
@@ -171,8 +229,12 @@ function AppContent() {
     for (let day = 1; day <= numDays; day++) {
       const date = new Date(year, month, day);
       const weekDayIndex = date.getDay();
-      const weekDayStr = Object.keys(dayMap).find(k => (dayMap as any)[k] === weekDayIndex);
+      const weekDayStr = Object.keys(dayMap).find(k => dayMap[k] === weekDayIndex);
       const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      // Skip locked days
+      if (lockedDays.has(dateKey)) continue;
+
       if (weekDayStr && weeklySchedule[weekDayStr]) {
         newSchedules[dateKey] = [...weeklySchedule[weekDayStr]];
       }
@@ -208,7 +270,7 @@ function AppContent() {
         ...newTasks,
       ];
       setGlobalTasks(updatedTasks);
-      localStorage.setItem('daytrack_tasks', JSON.stringify(updatedTasks));
+      localStorage.setItem(getUserKey(userData.email, 'tasks'), JSON.stringify(updatedTasks));
     }
   };
 
@@ -245,6 +307,8 @@ function AppContent() {
           specialDayNotes={specialDayNotes}
           onGenerateAchievements={handleGenerateAIAchievements}
           userData={userData}
+          lockedDays={lockedDays}
+          onUpdateLockedDays={handleUpdateLockedDays}
         />} />
         <Route path="/tasks" element={<Tasks tasks={globalTasks} onUpdateTasks={handleUpdateTasks} onGenerateAchievements={handleGenerateAIAchievements} />} />
         <Route path="/focus" element={<Focus />} />
@@ -268,7 +332,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <AppContent />
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
       </BrowserRouter>
     </ThemeProvider>
   );
