@@ -97,28 +97,29 @@ function AppContent() {
 
     const savedUserData = localStorage.getItem('daytrack_user_data');
     if (savedUserData) {
-      setUserData(JSON.parse(savedUserData));
+      const parsedUser = JSON.parse(savedUserData);
+      setUserData(parsedUser);
       setIsLoggedIn(true);
-    }
 
-    const savedTasks = localStorage.getItem('daytrack_tasks');
-    if (savedTasks) {
-      setGlobalTasks(JSON.parse(savedTasks));
-    }
+      // Load data theo email (per-user key)
+      const email = parsedUser.email;
+      const userKey = (suffix: string) =>
+        `daytrack_${suffix}_${email.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
 
-    const savedWeeklySchedules = localStorage.getItem('daytrack_weekly_schedules');
-    if (savedWeeklySchedules) {
-      setWeeklySchedules(JSON.parse(savedWeeklySchedules));
-    }
+      const savedTasks = localStorage.getItem(userKey('tasks'));
+      if (savedTasks) setGlobalTasks(JSON.parse(savedTasks));
 
-    const savedCalendarSchedules = localStorage.getItem('daytrack_calendar_schedules');
-    if (savedCalendarSchedules) {
-      setCalendarSchedules(JSON.parse(savedCalendarSchedules));
-    }
+      const savedWeekly = localStorage.getItem(userKey('weekly_schedules'));
+      if (savedWeekly) setWeeklySchedules(JSON.parse(savedWeekly));
 
-    const savedSpecialDayNotes = localStorage.getItem('daytrack_special_day_notes');
-    if (savedSpecialDayNotes) {
-      setSpecialDayNotes(JSON.parse(savedSpecialDayNotes));
+      const savedCalendar = localStorage.getItem(userKey('calendar_schedules'));
+      if (savedCalendar) setCalendarSchedules(JSON.parse(savedCalendar));
+
+      const savedNotes = localStorage.getItem(userKey('special_day_notes'));
+      if (savedNotes) setSpecialDayNotes(JSON.parse(savedNotes));
+
+      const savedLockedDays = localStorage.getItem(userKey('locked_days'));
+      if (savedLockedDays) setLockedDays(new Set(JSON.parse(savedLockedDays)));
     }
   }, []);
 
