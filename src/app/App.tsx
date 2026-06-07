@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
 }
 import { ThemeProvider } from './contexts/ThemeContext';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router';
 import { BottomNav } from './components/BottomNav';
 import { Timetable, type ScheduleBlock } from './pages/Timetable';
 import { Calendar } from './pages/Calendar';
@@ -331,11 +331,11 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <HashRouter>
         <ErrorBoundary>
           <AppContent />
         </ErrorBoundary>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   );
 }
