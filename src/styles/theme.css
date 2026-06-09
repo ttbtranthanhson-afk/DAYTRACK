@@ -179,3 +179,246 @@
     line-height: 1.5;
   }
 }
+
+/* ============================================================
+   PASTEL DESIGN SYSTEM — Color Tokens
+   Theo PASTEL_DESIGN_SYSTEM_SPEC.md
+   ============================================================ */
+
+:root {
+  /* --- Soft Blue --- */
+  --pastel-blue-50: #EFF6FF;
+  --pastel-blue-100: #DBEAFE;
+  --pastel-blue-200: #BFDBFE;
+  --pastel-blue-300: #93C5FD;
+  --pastel-blue-400: #60A5FA;
+  --pastel-blue-500: #3B82F6;
+  --pastel-blue-600: #2563EB;
+
+  /* --- Soft Purple --- */
+  --pastel-purple-50: #FAF5FF;
+  --pastel-purple-100: #F3E8FF;
+  --pastel-purple-200: #E9D5FF;
+  --pastel-purple-300: #D8B4FE;
+  --pastel-purple-400: #C084FC;
+  --pastel-purple-500: #A855F7;
+  --pastel-purple-600: #9333EA;
+
+  /* --- Soft Pink --- */
+  --pastel-pink-50: #FDF2F8;
+  --pastel-pink-100: #FCE7F3;
+  --pastel-pink-200: #FBCFE8;
+  --pastel-pink-300: #F9A8D4;
+  --pastel-pink-400: #F472B6;
+  --pastel-pink-500: #EC4899;
+  --pastel-pink-600: #DB2777;
+
+  /* --- Soft Green --- */
+  --pastel-green-50: #F0FDF4;
+  --pastel-green-100: #DCFCE7;
+  --pastel-green-200: #BBF7D0;
+  --pastel-green-300: #86EFAC;
+  --pastel-green-400: #4ADE80;
+  --pastel-green-500: #22C55E;
+  --pastel-green-600: #16A34A;
+
+  /* --- Soft Orange --- */
+  --pastel-orange-50: #FFF7ED;
+  --pastel-orange-100: #FFEDD5;
+  --pastel-orange-200: #FED7AA;
+  --pastel-orange-300: #FDBA74;
+  --pastel-orange-400: #FB923C;
+  --pastel-orange-500: #F97316;
+  --pastel-orange-600: #EA580C;
+
+  /* --- Soft Yellow --- */
+  --pastel-yellow-50: #FEFCE8;
+  --pastel-yellow-100: #FEF9C3;
+  --pastel-yellow-200: #FEF08A;
+  --pastel-yellow-300: #FDE047;
+  --pastel-yellow-400: #FACC15;
+  --pastel-yellow-500: #EAB308;
+  --pastel-yellow-600: #CA8A04;
+
+  /* --- Soft Cyan --- */
+  --pastel-cyan-50: #ECFEFF;
+  --pastel-cyan-100: #CFFAFE;
+  --pastel-cyan-200: #A5F3FC;
+  --pastel-cyan-300: #67E8F9;
+  --pastel-cyan-400: #22D3EE;
+  --pastel-cyan-500: #06B6D4;
+  --pastel-cyan-600: #0891B2;
+
+  /* --- Soft Rose --- */
+  --pastel-rose-50: #FFF1F2;
+  --pastel-rose-100: #FFE4E6;
+  --pastel-rose-200: #FECDD3;
+  --pastel-rose-300: #FDA4AF;
+  --pastel-rose-400: #FB7185;
+  --pastel-rose-500: #F43F5E;
+  --pastel-rose-600: #E11D48;
+
+  /* --- Warm Grays --- */
+  --pastel-gray-50: #FAFAF9;
+  --pastel-gray-100: #F5F5F4;
+  --pastel-gray-200: #E7E5E4;
+  --pastel-gray-300: #D6D3D1;
+  --pastel-gray-400: #A8A29E;
+  --pastel-gray-500: #78716C;
+  --pastel-gray-600: #57534E;
+  --pastel-gray-700: #44403C;
+  --pastel-gray-800: #292524;
+
+  /* --- Cool Slates --- */
+  --pastel-slate-50: #F8FAFC;
+  --pastel-slate-100: #F1F5F9;
+  --pastel-slate-200: #E2E8F0;
+  --pastel-slate-300: #CBD5E1;
+  --pastel-slate-400: #94A3B8;
+  --pastel-slate-500: #64748B;
+  --pastel-slate-600: #475569;
+
+  /* --- Gradient Tokens --- */
+  --gradient-blue-purple: linear-gradient(135deg, #60A5FA 0%, #A855F7 100%);
+  --gradient-blue-cyan: linear-gradient(135deg, #60A5FA 0%, #22D3EE 100%);
+  --gradient-blue-pink: linear-gradient(135deg, #60A5FA 0%, #F472B6 100%);
+  --gradient-purple-pink: linear-gradient(135deg, #A855F7 0%, #F472B6 100%);
+  --gradient-purple-blue: linear-gradient(135deg, #C084FC 0%, #93C5FD 100%);
+  --gradient-purple-rose: linear-gradient(135deg, #C084FC 0%, #FDA4AF 100%);
+  --gradient-pink-rose: linear-gradient(135deg, #F472B6 0%, #FB7185 100%);
+  --gradient-pink-orange: linear-gradient(135deg, #F472B6 0%, #FB923C 100%);
+  --gradient-green-cyan: linear-gradient(135deg, #4ADE80 0%, #22D3EE 100%);
+  --gradient-green-emerald: linear-gradient(135deg, #4ADE80 0%, #34D399 100%);
+  --gradient-orange-pink: linear-gradient(135deg, #FB923C 0%, #F472B6 100%);
+  --gradient-orange-yellow: linear-gradient(135deg, #FB923C 0%, #FACC15 100%);
+  --gradient-sunset: linear-gradient(135deg, #FACC15 0%, #FB923C 50%, #F472B6 100%);
+  --gradient-sky: linear-gradient(135deg, #93C5FD 0%, #C084FC 50%, #F9A8D4 100%);
+  --gradient-rainbow-soft: linear-gradient(135deg, #93C5FD 0%, #C084FC 33%, #F9A8D4 66%, #FDBA74 100%);
+  --gradient-morning: linear-gradient(135deg, #FEF08A 0%, #FDBA74 50%, #F9A8D4 100%);
+  --gradient-ocean: linear-gradient(135deg, #67E8F9 0%, #60A5FA 50%, #C084FC 100%);
+  --gradient-garden: linear-gradient(135deg, #FEF08A 0%, #86EFAC 50%, #67E8F9 100%);
+
+  /* --- Background Gradients (subtle) --- */
+  --bg-gradient-blue: linear-gradient(180deg, rgba(219, 234, 254, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+  --bg-gradient-purple: linear-gradient(180deg, rgba(243, 232, 255, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+  --bg-gradient-pink: linear-gradient(180deg, rgba(252, 231, 243, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+  --bg-gradient-green: linear-gradient(180deg, rgba(220, 252, 231, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+  --bg-gradient-orange: linear-gradient(180deg, rgba(255, 237, 213, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+  --bg-gradient-multi: linear-gradient(180deg, rgba(219, 234, 254, 0.2) 0%, rgba(243, 232, 255, 0.2) 50%, rgba(252, 231, 243, 0.2) 100%);
+
+  /* --- Colored Shadows --- */
+  --shadow-blue: 0 4px 14px rgba(96, 165, 250, 0.25);
+  --shadow-purple: 0 4px 14px rgba(168, 85, 247, 0.25);
+  --shadow-pink: 0 4px 14px rgba(244, 114, 182, 0.25);
+  --shadow-green: 0 4px 14px rgba(74, 222, 128, 0.25);
+  --shadow-orange: 0 4px 14px rgba(251, 146, 60, 0.25);
+  --shadow-blue-lg: 0 10px 20px rgba(96, 165, 250, 0.15), 0 3px 6px rgba(96, 165, 250, 0.1);
+  --shadow-purple-lg: 0 10px 20px rgba(168, 85, 247, 0.15), 0 3px 6px rgba(168, 85, 247, 0.1);
+  --shadow-pink-lg: 0 10px 20px rgba(244, 114, 182, 0.15), 0 3px 6px rgba(244, 114, 182, 0.1);
+  --shadow-green-lg: 0 10px 20px rgba(74, 222, 128, 0.15), 0 3px 6px rgba(74, 222, 128, 0.1);
+  --shadow-orange-lg: 0 10px 20px rgba(251, 146, 60, 0.15), 0 3px 6px rgba(251, 146, 60, 0.1);
+
+  /* --- Animation Timing --- */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+}
+
+/* Tailwind v4 theme registration */
+@theme inline {
+  /* Pastel Colors */
+  --color-pastel-blue-50: var(--pastel-blue-50);
+  --color-pastel-blue-100: var(--pastel-blue-100);
+  --color-pastel-blue-200: var(--pastel-blue-200);
+  --color-pastel-blue-300: var(--pastel-blue-300);
+  --color-pastel-blue-400: var(--pastel-blue-400);
+  --color-pastel-blue-500: var(--pastel-blue-500);
+  --color-pastel-blue-600: var(--pastel-blue-600);
+
+  --color-pastel-purple-50: var(--pastel-purple-50);
+  --color-pastel-purple-100: var(--pastel-purple-100);
+  --color-pastel-purple-200: var(--pastel-purple-200);
+  --color-pastel-purple-300: var(--pastel-purple-300);
+  --color-pastel-purple-400: var(--pastel-purple-400);
+  --color-pastel-purple-500: var(--pastel-purple-500);
+  --color-pastel-purple-600: var(--pastel-purple-600);
+
+  --color-pastel-pink-50: var(--pastel-pink-50);
+  --color-pastel-pink-100: var(--pastel-pink-100);
+  --color-pastel-pink-200: var(--pastel-pink-200);
+  --color-pastel-pink-300: var(--pastel-pink-300);
+  --color-pastel-pink-400: var(--pastel-pink-400);
+  --color-pastel-pink-500: var(--pastel-pink-500);
+  --color-pastel-pink-600: var(--pastel-pink-600);
+
+  --color-pastel-green-50: var(--pastel-green-50);
+  --color-pastel-green-100: var(--pastel-green-100);
+  --color-pastel-green-200: var(--pastel-green-200);
+  --color-pastel-green-300: var(--pastel-green-300);
+  --color-pastel-green-400: var(--pastel-green-400);
+  --color-pastel-green-500: var(--pastel-green-500);
+  --color-pastel-green-600: var(--pastel-green-600);
+
+  --color-pastel-orange-50: var(--pastel-orange-50);
+  --color-pastel-orange-100: var(--pastel-orange-100);
+  --color-pastel-orange-200: var(--pastel-orange-200);
+  --color-pastel-orange-300: var(--pastel-orange-300);
+  --color-pastel-orange-400: var(--pastel-orange-400);
+  --color-pastel-orange-500: var(--pastel-orange-500);
+  --color-pastel-orange-600: var(--pastel-orange-600);
+
+  --color-pastel-yellow-50: var(--pastel-yellow-50);
+  --color-pastel-yellow-100: var(--pastel-yellow-100);
+  --color-pastel-yellow-200: var(--pastel-yellow-200);
+  --color-pastel-yellow-300: var(--pastel-yellow-300);
+  --color-pastel-yellow-400: var(--pastel-yellow-400);
+  --color-pastel-yellow-500: var(--pastel-yellow-500);
+  --color-pastel-yellow-600: var(--pastel-yellow-600);
+
+  --color-pastel-cyan-50: var(--pastel-cyan-50);
+  --color-pastel-cyan-100: var(--pastel-cyan-100);
+  --color-pastel-cyan-200: var(--pastel-cyan-200);
+  --color-pastel-cyan-300: var(--pastel-cyan-300);
+  --color-pastel-cyan-400: var(--pastel-cyan-400);
+  --color-pastel-cyan-500: var(--pastel-cyan-500);
+  --color-pastel-cyan-600: var(--pastel-cyan-600);
+
+  --color-pastel-rose-50: var(--pastel-rose-50);
+  --color-pastel-rose-100: var(--pastel-rose-100);
+  --color-pastel-rose-200: var(--pastel-rose-200);
+  --color-pastel-rose-300: var(--pastel-rose-300);
+  --color-pastel-rose-400: var(--pastel-rose-400);
+  --color-pastel-rose-500: var(--pastel-rose-500);
+  --color-pastel-rose-600: var(--pastel-rose-600);
+
+  --color-pastel-gray-50: var(--pastel-gray-50);
+  --color-pastel-gray-100: var(--pastel-gray-100);
+  --color-pastel-gray-200: var(--pastel-gray-200);
+  --color-pastel-gray-300: var(--pastel-gray-300);
+  --color-pastel-gray-400: var(--pastel-gray-400);
+  --color-pastel-gray-500: var(--pastel-gray-500);
+  --color-pastel-gray-600: var(--pastel-gray-600);
+  --color-pastel-gray-700: var(--pastel-gray-700);
+  --color-pastel-gray-800: var(--pastel-gray-800);
+
+  --color-pastel-slate-50: var(--pastel-slate-50);
+  --color-pastel-slate-100: var(--pastel-slate-100);
+  --color-pastel-slate-200: var(--pastel-slate-200);
+  --color-pastel-slate-300: var(--pastel-slate-300);
+  --color-pastel-slate-400: var(--pastel-slate-400);
+  --color-pastel-slate-500: var(--pastel-slate-500);
+  --color-pastel-slate-600: var(--pastel-slate-600);
+
+  /* Shadow tokens */
+  --shadow-pastel-blue: var(--shadow-blue);
+  --shadow-pastel-purple: var(--shadow-purple);
+  --shadow-pastel-pink: var(--shadow-pink);
+  --shadow-pastel-green: var(--shadow-green);
+  --shadow-pastel-orange: var(--shadow-orange);
+  --shadow-pastel-blue-lg: var(--shadow-blue-lg);
+  --shadow-pastel-purple-lg: var(--shadow-purple-lg);
+  --shadow-pastel-pink-lg: var(--shadow-pink-lg);
+}

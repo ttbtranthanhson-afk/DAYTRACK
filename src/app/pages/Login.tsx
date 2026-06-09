@@ -135,43 +135,53 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-pink-950/30 flex items-center justify-center px-6 py-10 transition-colors duration-200">
-      <div className="w-full max-w-md">
+    <div
+      className="min-h-screen flex items-center justify-center px-6 py-10 transition-colors duration-200"
+      style={{ background: 'linear-gradient(135deg, rgba(219,234,254,0.35) 0%, rgba(243,232,255,0.35) 50%, rgba(252,231,243,0.35) 100%), #ffffff' }}
+    >
+      <div className="w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <Logo size={100} />
+            {/* Logo container với gradient pastel */}
+            <div
+              className="p-1 rounded-3xl shadow-lg"
+              style={{ background: 'linear-gradient(135deg, #60A5FA 0%, #A855F7 50%, #F472B6 100%)', boxShadow: 'var(--shadow-blue-lg)' }}
+            >
+              <div className="bg-white/20 rounded-3xl p-2">
+                <Logo size={80} />
+              </div>
+            </div>
           </div>
-          <h1 className="text-3xl text-gray-800 dark:text-[#E9ECEF] mb-2">DayTrack</h1>
-          <p className="text-sm text-gray-500 dark:text-[#ADB5BD]">Năng suất lành mạnh, không áp lực</p>
+          <h1 className="text-3xl text-pastel-gray-800 dark:text-[#E9ECEF] mb-2">DayTrack</h1>
+          <p className="text-sm text-pastel-gray-500 dark:text-[#ADB5BD]">Năng suất lành mạnh, không áp lực</p>
         </div>
 
-        <div className="flex gap-2 mb-4 bg-white dark:bg-[#25262B] rounded-2xl p-1 shadow-sm transition-colors">
+        <div className="flex gap-2 mb-4 bg-white dark:bg-[#25262B] rounded-2xl p-1 shadow-sm transition-colors" style={{ boxShadow: 'var(--shadow-blue)' }}>
           <button
             onClick={() => switchTab('login')}
-            className={`flex-1 py-3 rounded-xl transition-all ${
-              activeTab === 'login'
-                ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#373A40]'
-            }`}
+            className={`flex-1 py-3 rounded-xl transition-all font-medium ${activeTab === 'login'
+                ? 'text-white shadow-lg'
+                : 'text-pastel-gray-600 dark:text-gray-400 hover:bg-pastel-blue-50 dark:hover:bg-[#373A40]'
+              }`}
+            style={activeTab === 'login' ? { background: 'var(--gradient-blue-purple)' } : {}}
           >
             Đăng nhập
           </button>
           <button
             onClick={() => switchTab('signup')}
-            className={`flex-1 py-3 rounded-xl transition-all ${
-              activeTab === 'signup'
-                ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#373A40]'
-            }`}
+            className={`flex-1 py-3 rounded-xl transition-all font-medium ${activeTab === 'signup'
+                ? 'text-white shadow-lg'
+                : 'text-pastel-gray-600 dark:text-gray-400 hover:bg-pastel-blue-50 dark:hover:bg-[#373A40]'
+              }`}
+            style={activeTab === 'signup' ? { background: 'var(--gradient-blue-purple)' } : {}}
           >
             Đăng ký
           </button>
         </div>
 
         {message && (
-          <div className={`mb-4 rounded-2xl p-3 flex items-start gap-2 text-sm ${
-            message.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
-          }`}>
+          <div className={`mb-4 rounded-2xl p-3 flex items-start gap-2 text-sm ${message.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+            }`}>
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <span>{message.text}</span>
           </div>

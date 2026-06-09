@@ -1,6 +1,7 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+@import './animations.css';
 
 :root {
   --daytrack-accent: #60a5fa;
@@ -43,7 +44,7 @@
   padding-bottom: 1rem !important;
 }
 
-[data-daytrack-compact='true'] .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+[data-daytrack-compact='true'] .space-y-6> :not([hidden])~ :not([hidden]) {
   margin-top: 1rem !important;
 }
 
