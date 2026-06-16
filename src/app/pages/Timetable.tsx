@@ -151,32 +151,62 @@ export function Timetable({
     : (weeklySchedules[currentDay] || []);
   const activeBlock = todaySchedule.find(block => isBlockActiveNow(block, now)) || null;
 
+  // Đánh dấu user đã mở app hôm nay
   useEffect(() => {
-    if (!activeBlock) return;
+    const openedKey = `daytrack_app_opened_${todayInfo.dateKey}`;
+    localStorage.setItem(openedKey, Date.now().toString());
+  }, [todayInfo.dateKey]);
 
-    const range = getTimeRangeMinutes(activeBlock.time);
-    if (!range) return;
-
-    const notificationKey = `daytrack_schedule_notified_${todayInfo.dateKey}_${activeBlock.id}_${range.startMinutes}`;
-    if (localStorage.getItem(notificationKey)) return;
-
-    const notify = () => {
-      localStorage.setItem(notificationKey, 'true');
-      new Notification('DayTrack', {
-        body: `Đến giờ: ${activeBlock.title} (${activeBlock.time})`,
-      });
-    };
-
+  // Thông báo trước 5 phút khi lịch sắp diễn ra
+  useEffect(() => {
     if (typeof Notification === 'undefined') return;
 
-    if (Notification.permission === 'granted') {
-      notify();
-    } else if (Notification.permission === 'default') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') notify();
-      });
-    }
-  }, [activeBlock, todayInfo.dateKey]);
+    const checkUpcomingSchedules = () => {
+      if (Notification.permission !== 'granted') return;
+
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const todayBlocks = weeklySchedules[todayInfo.dayName] || [];
+
+      for (const block of todayBlocks) {
+        const range = getTimeRangeMinutes(block.time);
+        if (!range) continue;
+
+        const minutesUntilStart = range.startMinutes - currentMinutes;
+
+        // Gửi thông báo lần 1: khi còn 5 phút (trong khoảng 4-6 phút)
+        if (minutesUntilStart >= 4 && minutesUntilStart <= 6) {
+          const notifyKey1 = `daytrack_notify1_${todayInfo.dateKey}_${block.id}_${range.startMinutes}`;
+          if (!localStorage.getItem(notifyKey1)) {
+            localStorage.setItem(notifyKey1, 'true');
+            new Notification('DayTrack – Sắp đến giờ! ⏰', {
+              body: `${block.title} bắt đầu sau 5 phút (${block.time})`,
+              tag: notifyKey1,
+            });
+
+            // Sau 5 phút, nếu user chưa mở app lại → gửi thêm lần 2
+            window.setTimeout(() => {
+              const openedKey = `daytrack_app_opened_${todayInfo.dateKey}`;
+              const openedAt = parseInt(localStorage.getItem(openedKey) || '0', 10);
+              const notifyKey2 = `daytrack_notify2_${todayInfo.dateKey}_${block.id}_${range.startMinutes}`;
+              // Nếu chưa gửi lần 2 và user chưa mở app trong 5 phút qua
+              const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+              if (!localStorage.getItem(notifyKey2) && openedAt < fiveMinutesAgo) {
+                localStorage.setItem(notifyKey2, 'true');
+                new Notification('DayTrack – Đến giờ rồi! 🔔', {
+                  body: `${block.title} đã bắt đầu! (${block.time})`,
+                  tag: notifyKey2,
+                });
+              }
+            }, 5 * 60 * 1000);
+          }
+        }
+      }
+    };
+
+    checkUpcomingSchedules();
+    const interval = window.setInterval(checkUpcomingSchedules, 30 * 1000);
+    return () => window.clearInterval(interval);
+  }, [now, weeklySchedules, todayInfo.dayName, todayInfo.dateKey]);
 
   const handleOpenCreate = () => {
     setEditingBlock(null);
