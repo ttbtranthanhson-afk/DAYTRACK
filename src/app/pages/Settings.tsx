@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, User, Bell, Palette, Info, LogOut, Calendar, Briefcase, Target, MessageSquareCode, Key, Eye, EyeOff } from 'lucide-react';
-import { PageContainer } from '../components/PageContainer';
-import { LogoMini } from '../components/Logo';
+import { ChevronRight, User, Bell, Palette, Info, LogOut, MessageSquareCode, Key, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 interface UserData {
@@ -34,143 +32,142 @@ export function Settings({ userData, onLogout }: SettingsProps) {
     localStorage.setItem('gemini_api_key', key);
   };
 
-  const settingsItems = [
-    { icon: User, label: 'Hồ sơ', color: 'text-blue-500 dark:text-blue-300', bg: 'bg-blue-50 dark:bg-blue-950/30', path: '/profile' },
-    { icon: Bell, label: 'Thông báo', color: 'text-purple-500 dark:text-purple-300', bg: 'bg-purple-50 dark:bg-purple-950/30', path: '/notifications' },
-    { icon: Palette, label: 'Giao diện', color: 'text-pink-500 dark:text-pink-300', bg: 'bg-pink-50 dark:bg-pink-950/30', path: '/appearance' },
-    { icon: Info, label: 'Giới thiệu', color: 'text-orange-500 dark:text-orange-300', bg: 'bg-orange-50 dark:bg-orange-950/30', path: '/about' },
-    ...(userData.isDeveloper
-      ? [{ icon: MessageSquareCode, label: 'Ý kiến phản hồi', color: 'text-cyan-500 dark:text-cyan-300', bg: 'bg-cyan-50 dark:bg-cyan-950/30', path: '/developer-feedback' }]
-      : []),
-  ];
-
   const handleLogout = () => {
     onLogout();
     navigate('/');
   };
 
+  const accountItems = [
+    { icon: User, label: 'Hồ sơ', path: '/profile', color: 'text-blue-500', bg: 'bg-blue-50' },
+  ];
+
+  const appItems = [
+    { icon: Bell, label: 'Thông báo', path: '/notifications', color: 'text-purple-500', bg: 'bg-purple-50' },
+    { icon: Palette, label: 'Giao diện', path: '/appearance', color: 'text-pink-500', bg: 'bg-pink-50' },
+  ];
+
+  const helpItems = [
+    { icon: Info, label: 'Giới thiệu', path: '/about', color: 'text-green-500', bg: 'bg-green-50' },
+    ...(userData.isDeveloper
+      ? [{ icon: MessageSquareCode, label: 'Ý kiến phản hồi', path: '/developer-feedback', color: 'text-cyan-500', bg: 'bg-cyan-50' }]
+      : []),
+  ];
+
+  const renderGroup = (title: string, items: any[]) => (
+    <div className="mb-6">
+      <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">{title}</h3>
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50">
+        {items.map((item, index) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.label}
+              onClick={() => navigate(item.path)}
+              className={`w-full flex items-center p-4 border-b border-gray-50 last:border-none hover:bg-gray-50 transition-colors`}
+            >
+              <div className={`w-10 h-10 rounded-xl ${item.bg || 'bg-gray-50'} flex items-center justify-center mr-4`}>
+                <Icon className={`w-5 h-5 ${item.color || 'text-gray-600'}`} />
+              </div>
+              <span className="flex-1 text-left font-semibold text-gray-800">{item.label}</span>
+              <ChevronRight className="w-5 h-5 text-gray-400" />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
-    <PageContainer className="bg-gradient-to-b from-gray-50 to-white dark:from-[#1A1B1E] dark:to-[#1A1B1E]" showSettings={false}>
+    <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
-      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
-        <h1 className="text-2xl text-gray-800 dark:text-[#E9ECEF] mb-1 transition-colors">Cài đặt</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors">Quản lý tài khoản của bạn</p>
+      <div className="sticky top-0 bg-white/80 backdrop-blur-lg px-6 py-6 border-b border-gray-100 z-10">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Cài đặt</h1>
+        <p className="text-sm text-gray-400 font-medium">Quản lý tài khoản của bạn</p>
       </div>
 
-      <div className="px-6 py-6">
-        {/* User Profile Card */}
-        <div className="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-950/30 dark:to-purple-950/30 rounded-3xl p-6 mb-6 border border-transparent dark:border-blue-800/30 transition-colors">
-          <div className="flex items-center gap-4 mb-4">
-            <LogoMini size={64} />
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">{userData.name}</h2>
-                {userData.isDeveloper && (
-                  <span className="text-xs bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 px-2 py-1 rounded-lg">
-                    Nhà phát triển
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{userData.email}</p>
-            </div>
-          </div>
-
-          {/* User Info Details */}
-          {(userData.age || userData.job || userData.goals) && (
-            <div className="bg-white/60 dark:bg-[#2C2E33]/70 rounded-2xl p-4 space-y-2 border border-transparent dark:border-[#373A40]">
-              {userData.age && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="w-4 h-4 text-blue-500" />
-                  <span className="text-gray-600 dark:text-gray-400">Tuổi:</span>
-                  <span className="text-gray-800 dark:text-[#E9ECEF]">{userData.age} tuổi</span>
-                </div>
-              )}
-              {userData.job && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Briefcase className="w-4 h-4 text-purple-500" />
-                  <span className="text-gray-600 dark:text-gray-400">Nghề nghiệp:</span>
-                  <span className="text-gray-800 dark:text-[#E9ECEF]">{userData.job}</span>
-                </div>
-              )}
-              {userData.goals && (
-                <div className="flex items-start gap-2 text-sm">
-                  <Target className="w-4 h-4 text-pink-500 mt-0.5" />
-                  <div className="flex-1">
-                    <span className="text-gray-600 dark:text-gray-400">Mục tiêu:</span>
-                    <p className="text-gray-800 dark:text-[#E9ECEF] mt-1">{userData.goals}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+      {/* Profile Section */}
+      <div className="flex items-center gap-4 mb-6 mt-6 px-6">
+        <div className="w-16 h-16 rounded-2xl bg-orange-100 text-orange-500 font-bold text-2xl flex items-center justify-center flex-shrink-0">
+          {userData.name.charAt(0).toUpperCase()}
         </div>
-
-        {/* AI Settings Card */}
-        <div className="bg-white dark:bg-[#2C2E33] rounded-3xl p-6 mb-6 border border-gray-100 dark:border-[#373A40] shadow-sm transition-colors">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
-              <Key className="w-4 h-4 text-yellow-600 dark:text-yellow-300" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF]">Cài đặt Trợ lý AI</h3>
+        <div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold text-gray-900">{userData.name}</h2>
+            {userData.isDeveloper && (
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-600 px-2 py-0.5 rounded-md">
+                DEV
+              </span>
+            )}
           </div>
-          <div className="space-y-3">
-            <label className="text-sm text-gray-600 dark:text-gray-300">Google Gemini API Key</label>
+          <p className="text-sm text-gray-500 font-medium">{userData.email}</p>
+        </div>
+      </div>
+
+      <div className="px-6">
+        {renderGroup('Tài khoản', accountItems)}
+        
+        {/* App Group including AI Key */}
+        <div className="mb-6">
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Ứng dụng</h3>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50 mb-4">
+            {appItems.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => navigate(item.path)}
+                  className={`w-full flex items-center p-4 border-b border-gray-50 last:border-none hover:bg-gray-50 transition-colors`}
+                >
+                  <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mr-4`}>
+                    <Icon className={`w-5 h-5 ${item.color}`} />
+                  </div>
+                  <span className="flex-1 text-left font-semibold text-gray-800">{item.label}</span>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50 p-4">
+            <div className="flex items-center gap-4 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center">
+                <Key className="w-5 h-5 text-yellow-500" />
+              </div>
+              <h4 className="font-semibold text-gray-800">Cài đặt Trợ lý AI</h4>
+            </div>
             <div className="relative">
               <input
                 type={showApiKey ? 'text' : 'password'}
                 value={apiKey}
                 onChange={(e) => handleSaveApiKey(e.target.value)}
-                placeholder="Nhập API Key của bạn..."
-                className="w-full pl-4 pr-12 py-3 bg-gray-50 dark:bg-[#25262B] text-gray-800 dark:text-[#E9ECEF] placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-yellow-300 dark:focus:ring-yellow-800/60 font-mono text-sm transition-colors"
+                placeholder="Nhập Google Gemini API Key"
+                className="w-full pl-4 pr-12 py-3 bg-gray-50 text-gray-900 font-medium placeholder:text-gray-400 rounded-xl border border-transparent outline-none focus:border-yellow-400 transition-colors text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
               >
                 {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              API Key được lưu cục bộ trên máy của bạn và chỉ dùng để gọi Gemini. Lấy key miễn phí tại Google AI Studio.
-            </p>
           </div>
         </div>
 
-        {/* Settings Items */}
-        <div className="space-y-2 mb-6">
-          {settingsItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.label}
-                onClick={() => item.path && navigate(item.path)}
-                className="w-full bg-white dark:bg-[#2C2E33] rounded-2xl p-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-[#373A40] transition-colors border border-gray-100 dark:border-[#373A40]"
-              >
-                <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${item.color}`} />
-                </div>
-                <span className="flex-1 text-left text-gray-800 dark:text-[#E9ECEF]">{item.label}</span>
-                <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-50 dark:bg-red-950/30 text-red-500 dark:text-red-300 rounded-2xl p-4 flex items-center justify-center gap-3 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border border-red-100 dark:border-red-800/40"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>Đăng xuất</span>
-        </button>
-
-        {/* Version Info */}
-        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-8">
-          DayTrack v1.0.0
-        </p>
+        {renderGroup('Hỗ trợ', helpItems)}
       </div>
-    </PageContainer>
+
+      <button
+        onClick={handleLogout}
+        className="mt-8 mx-6 w-[calc(100%-3rem)] bg-rose-50 text-rose-500 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-100 transition-colors"
+      >
+        <LogOut className="w-5 h-5" />
+        <span>Đăng xuất</span>
+      </button>
+
+      <p className="text-center text-xs font-bold text-gray-300 mt-8 uppercase tracking-wider">
+        DayTrack v1.0.0
+      </p>
+    </div>
   );
 }

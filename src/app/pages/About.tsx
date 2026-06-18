@@ -1,21 +1,13 @@
 import { useState } from 'react';
-import { ChevronLeft, Globe, MessageCircle, Mail, Instagram, FileText, Shield, ExternalLink, Send, X } from 'lucide-react';
-import { PageContainer } from '../components/PageContainer';
-import { Logo } from '../components/Logo';
+import { ChevronLeft, Globe, MessageCircle, Mail, Instagram, FileText, Shield, ExternalLink, Send, X, Users, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { motion } from 'motion/react';
-
-const team = [
-  { name: 'Trần Thanh Sơn', role: 'Trưởng nhóm', avatar: 'S', color: 'from-blue-400 to-purple-400' },
-  { name: 'Lương Hà Quân', role: 'Lập trình viên', avatar: 'Q', color: 'from-green-400 to-emerald-400' },
-  { name: 'Nguyễn Vũ Thu Thảo', role: 'Trưởng nhóm nội dung và chiến lược', avatar: 'T', color: 'from-pink-400 to-rose-400' },
-];
+import { Logo } from '../components/Logo';
 
 const social = [
-  { icon: Globe, label: 'Website', value: 'daytrack.app', color: 'text-blue-500 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/30' },
-  { icon: MessageCircle, label: 'Discord', value: 'Tham gia cộng đồng', color: 'text-purple-500 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/30' },
-  { icon: Mail, label: 'Email', value: 'hello@daytrack.app', color: 'text-orange-500 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/30' },
-  { icon: Instagram, label: 'Instagram', value: '@daytrack', color: 'text-pink-500 dark:text-pink-300 bg-pink-50 dark:bg-pink-950/30' },
+  { icon: Globe, label: 'Website', value: 'daytrack.app' },
+  { icon: MessageCircle, label: 'Discord', value: 'Tham gia nhóm' },
+  { icon: Mail, label: 'Email', value: 'hello@daytrack' },
+  { icon: Instagram, label: 'Instagram', value: '@daytrack' },
 ];
 
 const feedbackQuestions = [
@@ -41,7 +33,7 @@ const feedbackQuestions = [
     id: 'improvements',
     label: 'Bạn thấy app cần cải thiện những gì?',
     type: 'text',
-    placeholder: 'VD: thêm đồng bộ, sửa giao diện, tối ưu thông báo...',
+    placeholder: 'VD: thêm đồng bộ, sửa giao diện...',
   },
 ];
 
@@ -75,169 +67,128 @@ export function About() {
   };
 
   return (
-    <PageContainer className="bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/20 dark:to-[#1A1B1E]" showSettings={false}>
-      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
+    <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="sticky top-0 bg-white/80 backdrop-blur-lg px-6 py-6 border-b border-gray-100 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-gray-50 transition-colors"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
           </button>
           <div>
-            <h1 className="text-2xl text-gray-800 dark:text-[#E9ECEF]">Giới thiệu</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Về DayTrack</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-0.5">Giới thiệu</h1>
+            <p className="text-sm font-medium text-gray-400">Về DayTrack</p>
           </div>
         </div>
       </div>
 
       <div className="px-6 py-6 space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center py-8"
-        >
-          <div className="flex justify-center mb-6">
-            <Logo size={120} />
+        {/* App Info Header */}
+        <div className="flex flex-col items-center justify-center py-6">
+          <div className="w-20 h-20 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-200 mb-4">
+            <Logo size={48} className="text-white drop-shadow-sm" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-[#E9ECEF] mb-2">DayTrack</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 italic">Xây dựng ngày hoàn hảo của bạn.</p>
-        </motion.div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">DayTrack</h2>
+          <p className="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full mb-3">v1.0.0</p>
+          <p className="text-sm font-medium text-gray-400">Năng suất lành mạnh, không áp lực</p>
+        </div>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Thông tin ứng dụng</h3>
-          <div className="bg-white dark:bg-[#2C2E33] rounded-2xl shadow-sm border border-gray-100 dark:border-[#373A40] divide-y divide-gray-100 dark:divide-[#373A40] transition-colors">
+        {/* Thông tin & Pháp lý */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Thông tin & Pháp lý</h3>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50">
             {[
-              { label: 'Phiên bản', value: '1.0.0' },
-              { label: 'Cập nhật gần nhất', value: '24/5/2026' },
-              { label: 'Số bản dựng', value: '2026.05.002' },
-            ].map((item) => (
-              <div key={item.label} className="p-4 flex items-center justify-between">
-                <span className="text-gray-600 dark:text-gray-400">{item.label}</span>
-                <span className="text-gray-800 dark:text-[#E9ECEF] font-medium">{item.value}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Đội ngũ</h3>
-          <div className="grid grid-cols-3 gap-3">
-            {team.map((member) => (
-              <motion.div
-                key={member.name}
-                whileHover={{ scale: 1.03 }}
-                className="bg-white dark:bg-[#2C2E33] rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-[#373A40] text-center transition-colors"
-              >
-                <div className={`w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center text-white text-2xl shadow-lg`}>
-                  {member.avatar}
-                </div>
-                <h4 className="text-sm font-medium text-gray-800 dark:text-[#E9ECEF] mb-1">{member.name}</h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{member.role}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Mạng xã hội & liên hệ</h3>
-          <div className="space-y-3">
-            {social.map((item) => {
-              const Icon = item.icon;
-              return (
-                <motion.button
-                  key={item.label}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-white dark:bg-[#2C2E33] rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-[#373A40] flex items-center gap-4 hover:shadow-md dark:hover:bg-[#373A40] transition-all"
-                >
-                  <div className={`w-12 h-12 rounded-xl ${item.color.split(' ').filter(className => className.startsWith('bg-') || className.startsWith('dark:bg-')).join(' ')} flex items-center justify-center flex-shrink-0`}>
-                    <Icon className={`w-6 h-6 ${item.color.split(' ').filter(className => className.startsWith('text-') || className.startsWith('dark:text-')).join(' ')}`} />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.label}</p>
-                    <p className="text-gray-800 dark:text-[#E9ECEF] font-medium">{item.value}</p>
-                  </div>
-                  <ExternalLink className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-                </motion.button>
-              );
-            })}
-          </div>
-        </section>
-
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Pháp lý</h3>
-          <div className="bg-white dark:bg-[#2C2E33] rounded-2xl shadow-sm border border-gray-100 dark:border-[#373A40] divide-y divide-gray-100 dark:divide-[#373A40] transition-colors">
-            {[
-              { icon: Shield, label: 'Chính sách bảo mật' },
-              { icon: FileText, label: 'Điều khoản dịch vụ' },
-              { icon: FileText, label: 'Giấy phép mã nguồn mở' },
-            ].map((item) => {
+              { icon: Shield, label: 'Chính sách bảo mật', iconColor: 'text-blue-500', bg: 'bg-blue-50' },
+              { icon: FileText, label: 'Điều khoản dịch vụ', iconColor: 'text-purple-500', bg: 'bg-purple-50' },
+              { icon: Users, label: 'Đội ngũ phát triển', iconColor: 'text-orange-500', bg: 'bg-orange-50' },
+            ].map((item, index) => {
               const Icon = item.icon;
               return (
                 <button
-                  key={item.label}
-                  className="w-full p-4 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-[#373A40] transition-colors"
+                  key={index}
+                  className="w-full flex items-center p-4 border-b border-gray-50 last:border-none hover:bg-gray-50 transition-colors"
                 >
-                  <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  <span className="flex-1 text-left text-gray-800 dark:text-[#E9ECEF]">{item.label}</span>
-                  <ExternalLink className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mr-4 ${item.bg}`}>
+                    <Icon className={`w-5 h-5 ${item.iconColor}`} />
+                  </div>
+                  <span className="flex-1 text-left font-semibold text-gray-800">{item.label}</span>
+                  <ExternalLink className="w-5 h-5 text-gray-400" />
                 </button>
               );
             })}
           </div>
-        </section>
+        </div>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Hỗ trợ</h3>
-          <motion.button
-            onClick={() => setIsFeedbackOpen(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-white rounded-2xl p-5 shadow-xl shadow-purple-300/50 dark:shadow-purple-950/40 flex items-center justify-center gap-3"
-          >
-            <Send className="w-5 h-5" />
-            <span className="font-medium">Gửi phản hồi</span>
-          </motion.button>
+        {/* Mạng xã hội */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Cộng đồng</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {social.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={index}
+                  className="bg-white rounded-2xl p-4 flex flex-col items-center justify-center gap-2 border border-gray-50 shadow-sm hover:bg-gray-50 transition-colors"
+                >
+                  <Icon className="w-6 h-6 text-blue-500" />
+                  <span className="text-sm font-semibold text-gray-800 text-center">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Phản hồi */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Đóng góp</h3>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50">
+            <button
+              onClick={() => setIsFeedbackOpen(true)}
+              className="w-full flex items-center p-4 hover:bg-gray-50 transition-colors text-left"
+            >
+              <div className="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center mr-4">
+                <Heart className="w-5 h-5 text-pink-500" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-800">Gửi phản hồi</h4>
+                <p className="text-xs font-medium text-gray-500 mt-0.5">Giúp chúng tôi cải thiện DayTrack</p>
+              </div>
+              <Send className="w-5 h-5 text-gray-400" />
+            </button>
+          </div>
           {submittedMessage && (
-            <p className="text-center text-sm text-purple-500 dark:text-purple-300 mt-3">{submittedMessage}</p>
+            <p className="text-center text-sm font-bold text-green-500 mt-3">{submittedMessage}</p>
           )}
-        </section>
+        </div>
 
-        <div className="text-center py-6">
-          <p className="text-xs text-gray-400 dark:text-gray-500">
-            Được tạo ra cho những người muốn quản lý ngày hiệu quả hơn.
-          </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-            © 2026 DayTrack. Mọi quyền được bảo lưu.
+        <div className="text-center pt-8 pb-4">
+          <p className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+            © 2026 DayTrack. All rights reserved.
           </p>
         </div>
       </div>
 
       {isFeedbackOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
-          <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="bg-white dark:bg-[#25262B] rounded-t-3xl sm:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-transparent dark:border-[#373A40] transition-colors"
-          >
-            <div className="sticky top-0 bg-white dark:bg-[#25262B] border-b border-gray-100 dark:border-[#373A40] px-6 py-4 rounded-t-3xl flex items-center justify-between transition-colors">
+        <div className="fixed inset-0 bg-black/40 z-50 flex flex-col justify-end sm:items-center sm:justify-center">
+          <div className="bg-white w-full sm:w-[28rem] rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
-                <h2 className="text-xl text-gray-800 dark:text-[#E9ECEF]">Khảo sát phản hồi</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Chia sẻ trải nghiệm của bạn</p>
+                <h2 className="text-xl font-bold text-gray-900">Khảo sát phản hồi</h2>
+                <p className="text-sm font-medium text-gray-500">Chia sẻ trải nghiệm của bạn</p>
               </div>
               <button
                 onClick={() => setIsFeedbackOpen(false)}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors"
+                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 text-gray-600"
               >
-                <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleFeedbackSubmit} className="p-6 space-y-5">
+            <form onSubmit={handleFeedbackSubmit} className="p-6 overflow-y-auto space-y-5">
               {feedbackQuestions.map(question => (
                 <div key={question.id}>
-                  <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">{question.label}</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">{question.label}</label>
                   {question.type === 'choice' ? (
                     <div className="grid grid-cols-2 gap-2">
                       {question.options?.map(option => (
@@ -245,10 +196,10 @@ export function About() {
                           key={option}
                           type="button"
                           onClick={() => setFeedback(prev => ({ ...prev, [question.id]: option }))}
-                          className={`px-3 py-2 rounded-xl text-sm border transition-colors ${
+                          className={`px-3 py-2 rounded-xl text-sm font-semibold transition-colors border-2 ${
                             feedback[question.id] === option
-                              ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700/50'
-                              : 'bg-gray-50 dark:bg-[#2C2E33] text-gray-600 dark:text-gray-300 border-gray-100 dark:border-[#373A40] hover:bg-gray-100 dark:hover:bg-[#373A40]'
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : 'border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100'
                           }`}
                         >
                           {option}
@@ -260,31 +211,22 @@ export function About() {
                       value={feedback[question.id] ?? ''}
                       onChange={(event) => setFeedback(prev => ({ ...prev, [question.id]: event.target.value }))}
                       placeholder={question.placeholder}
-                      className="w-full min-h-24 px-4 py-3 bg-gray-50 dark:bg-[#2C2E33] text-gray-800 dark:text-[#E9ECEF] placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-800/60 resize-none transition-colors"
+                      className="w-full min-h-[80px] px-4 py-3 bg-gray-50 text-gray-900 font-medium placeholder:text-gray-400 placeholder:font-normal rounded-2xl border border-transparent outline-none focus:border-blue-500 focus:bg-white transition-colors resize-none text-sm"
                     />
                   )}
                 </div>
               ))}
 
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsFeedbackOpen(false)}
-                  className="flex-1 py-3 bg-gray-100 dark:bg-[#2C2E33] text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-200 dark:hover:bg-[#373A40] transition-colors"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-3 bg-gradient-to-r from-blue-400 to-purple-400 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all"
-                >
-                  Gửi
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="w-full py-4 bg-blue-500 text-white font-bold rounded-2xl hover:bg-blue-600 transition-colors mt-2"
+              >
+                Gửi phản hồi
+              </button>
             </form>
-          </motion.div>
+          </div>
         </div>
       )}
-    </PageContainer>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LogIn, Mail, Lock, User, Briefcase, Calendar, Target, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Logo } from '../components/Logo';
 
 interface UserData {
@@ -135,237 +135,190 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-6 py-10 transition-colors duration-200"
-      style={{ background: 'linear-gradient(135deg, rgba(219,234,254,0.35) 0%, rgba(243,232,255,0.35) 50%, rgba(252,231,243,0.35) 100%), #ffffff' }}
-    >
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            {/* Logo container với gradient pastel */}
-            <div
-              className="p-1 rounded-3xl shadow-lg"
-              style={{ background: 'linear-gradient(135deg, #60A5FA 0%, #A855F7 50%, #F472B6 100%)', boxShadow: 'var(--shadow-blue-lg)' }}
-            >
-              <div className="bg-white/20 rounded-3xl p-2">
-                <Logo size={80} />
-              </div>
-            </div>
+    <div className="min-h-screen bg-white flex flex-col justify-center px-6 pb-12">
+      <div className="w-full max-w-md mx-auto">
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <div className="w-16 h-16 bg-blue-500 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-blue-200">
+            <Logo size={40} className="text-white drop-shadow-md" />
           </div>
-          <h1 className="text-3xl text-pastel-gray-800 dark:text-[#E9ECEF] mb-2">DayTrack</h1>
-          <p className="text-sm text-pastel-gray-500 dark:text-[#ADB5BD]">Năng suất lành mạnh, không áp lực</p>
-        </div>
-
-        <div className="flex gap-2 mb-4 bg-white dark:bg-[#25262B] rounded-2xl p-1 shadow-sm transition-colors" style={{ boxShadow: 'var(--shadow-blue)' }}>
-          <button
-            onClick={() => switchTab('login')}
-            className={`flex-1 py-3 rounded-xl transition-all font-medium ${activeTab === 'login'
-                ? 'text-white shadow-lg'
-                : 'text-pastel-gray-600 dark:text-gray-400 hover:bg-pastel-blue-50 dark:hover:bg-[#373A40]'
-              }`}
-            style={activeTab === 'login' ? { background: 'var(--gradient-blue-purple)' } : {}}
-          >
-            Đăng nhập
-          </button>
-          <button
-            onClick={() => switchTab('signup')}
-            className={`flex-1 py-3 rounded-xl transition-all font-medium ${activeTab === 'signup'
-                ? 'text-white shadow-lg'
-                : 'text-pastel-gray-600 dark:text-gray-400 hover:bg-pastel-blue-50 dark:hover:bg-[#373A40]'
-              }`}
-            style={activeTab === 'signup' ? { background: 'var(--gradient-blue-purple)' } : {}}
-          >
-            Đăng ký
-          </button>
+          <h1 className="text-4xl font-bold text-gray-900">DayTrack</h1>
+          <p className="text-gray-400 font-medium mt-2">Năng suất lành mạnh, không áp lực</p>
         </div>
 
         {message && (
-          <div className={`mb-4 rounded-2xl p-3 flex items-start gap-2 text-sm ${message.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
-            }`}>
-            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <div className={`mb-6 rounded-2xl p-4 flex items-start gap-3 text-sm font-semibold ${message.type === 'error' ? 'bg-rose-50 text-rose-500' : 'bg-green-50 text-green-500'}`}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span>{message.text}</span>
           </div>
         )}
 
-        {activeTab === 'login' && (
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Email</label>
-              <div className="relative">
+        {/* Form Container */}
+        <div className="w-full">
+          {activeTab === 'login' ? (
+            <form onSubmit={handleLoginSubmit}>
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>
                 <input
                   type="email"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   placeholder="email@cuaban.com"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Mật khẩu</label>
-              <div className="relative">
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mật khẩu</label>
                 <input
                   type="password"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   placeholder="Nhập mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div className="bg-white/70 dark:bg-[#25262B] rounded-2xl p-3 text-xs text-gray-500 dark:text-[#868E96] border border-blue-100 dark:border-[#373A40] transition-colors">
-              Tài khoản nhà phát triển có thể đăng nhập trực tiếp bằng email và mật khẩu được cấp.
-            </div>
+              <button type="button" className="text-sm font-semibold text-blue-500 text-right w-full block mb-6">
+                Quên mật khẩu?
+              </button>
 
-            <button
-              type="submit"
-              className="w-full py-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-white rounded-2xl shadow-xl shadow-purple-300/50 hover:shadow-2xl transition-all mt-6 flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-5 h-5" />
-              <span>Đăng nhập</span>
-            </button>
-          </form>
-        )}
+              <button
+                type="submit"
+                className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-2xl transition-colors mt-4"
+              >
+                Đăng nhập
+              </button>
 
-        {activeTab === 'signup' && (
-          <form onSubmit={handleSignupSubmit} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Tên của bạn *</label>
-              <div className="relative">
+              <div className="text-center mt-8">
+                <p className="text-sm font-semibold text-gray-500">
+                  Chưa có tài khoản?{' '}
+                  <button type="button" onClick={() => switchTab('signup')} className="text-blue-500 hover:underline">
+                    Đăng ký
+                  </button>
+                </p>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleSignupSubmit} className="max-h-[65vh] overflow-y-auto pr-2 pb-4">
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tên của bạn *</label>
                 <input
                   type="text"
                   value={signupName}
                   onChange={(e) => setSignupName(e.target.value)}
                   placeholder="Nhập tên của bạn"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm text-gray-600 mb-2">Email *</label>
-              <div className="relative">
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email *</label>
                 <input
                   type="email"
                   value={signupEmail}
                   onChange={(e) => setSignupEmail(e.target.value)}
                   placeholder="email@cuaban.com"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm text-gray-600 mb-2">Mật khẩu *</label>
-              <div className="relative">
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mật khẩu *</label>
                 <input
                   type="password"
                   value={signupPassword}
                   onChange={(e) => setSignupPassword(e.target.value)}
                   placeholder="Tạo mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-sm text-gray-600 mb-2">Xác nhận mật khẩu *</label>
-              <div className="relative">
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Xác nhận mật khẩu *</label>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Nhập lại mật khẩu"
-                  className="w-full pl-12 pr-4 py-4 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                  className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
-            </div>
 
-            <div className="pt-2">
-              <p className="text-sm text-gray-500 mb-3">Chia sẻ về bản thân (tùy chọn)</p>
+              <div className="pt-4 border-t border-gray-100">
+                <p className="text-sm font-semibold text-gray-900 mb-4">Thông tin thêm (tùy chọn)</p>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-2">Tuổi</label>
-                  <div className="relative">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tuổi</label>
                     <input
                       type="number"
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
                       placeholder="Tuổi của bạn"
-                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-blue-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                      className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                     />
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm text-gray-600 mb-2">Nghề nghiệp / Học tập</label>
-                  <div className="relative">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nghề nghiệp</label>
                     <input
                       type="text"
                       value={job}
                       onChange={(e) => setJob(e.target.value)}
                       placeholder="VD: Sinh viên, Lập trình viên"
-                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-purple-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all"
+                      className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal"
                     />
-                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm text-gray-600 mb-2">Thói quen hiện tại</label>
-                  <textarea
-                    value={habits}
-                    onChange={(e) => setHabits(e.target.value)}
-                    placeholder="VD: Học buổi sáng, tập thể dục 3 lần/tuần"
-                    className="w-full px-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-pink-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all resize-none"
-                    rows={3}
-                  />
-                </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Thói quen</label>
+                    <textarea
+                      value={habits}
+                      onChange={(e) => setHabits(e.target.value)}
+                      placeholder="VD: Học buổi sáng, chạy bộ..."
+                      className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal resize-none"
+                      rows={2}
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm text-gray-600 mb-2">Mục tiêu với DayTrack</label>
-                  <div className="relative">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mục tiêu</label>
                     <textarea
                       value={goals}
                       onChange={(e) => setGoals(e.target.value)}
-                      placeholder="VD: Quản lý thời gian tốt hơn, giảm stress, cân bằng công việc và cuộc sống"
-                      className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2C2E33] rounded-2xl border border-gray-200 dark:border-[#373A40] outline-none focus:ring-2 focus:ring-orange-300 dark:text-[#E9ECEF] dark:placeholder:text-[#868E96] transition-all resize-none"
-                      rows={3}
+                      placeholder="VD: Quản lý thời gian, cân bằng..."
+                      className="w-full px-4 py-3.5 bg-gray-50 text-gray-900 font-semibold rounded-2xl border border-transparent outline-none focus:bg-white focus:border-blue-500 transition-all placeholder:text-gray-400 placeholder:font-normal resize-none"
+                      rows={2}
                     />
-                    <Target className="absolute left-4 top-3 w-5 h-5 text-gray-400" />
                   </div>
                 </div>
               </div>
-            </div>
 
-            <button
-              type="submit"
-              className="w-full py-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-white rounded-2xl shadow-xl shadow-purple-300/50 hover:shadow-2xl transition-all mt-6"
-            >
-              Tạo tài khoản
-            </button>
-          </form>
-        )}
+              <button
+                type="submit"
+                className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-2xl transition-colors mt-8"
+              >
+                Tạo tài khoản
+              </button>
 
-        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-6">
-          Được tạo ra cho những người muốn quản lý ngày hiệu quả hơn
-        </p>
+              <div className="text-center mt-8">
+                <p className="text-sm font-semibold text-gray-500">
+                  Đã có tài khoản?{' '}
+                  <button type="button" onClick={() => switchTab('login')} className="text-blue-500 hover:underline">
+                    Đăng nhập
+                  </button>
+                </p>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

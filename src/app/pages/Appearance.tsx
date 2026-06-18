@@ -1,29 +1,35 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, Sun, Moon, Palette, Sparkles, Check, RotateCcw } from 'lucide-react';
-import { PageContainer } from '../components/PageContainer';
+import { ChevronLeft, Sun, Moon, Sparkles, Check, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import { useTheme } from '../contexts/ThemeContext';
 import type { Theme } from '../contexts/ThemeContext';
+import { Logo } from '../components/Logo';
 
 const themes = [
-  { id: 'light', name: 'Chế độ sáng', icon: Sun, gradient: 'from-blue-100 to-purple-100', page: 'from-pink-50/30 to-white' },
-  { id: 'dark', name: 'Chế độ tối', icon: Moon, gradient: 'from-gray-700 to-gray-900', page: 'from-gray-900 to-gray-800' },
-  { id: 'pastel', name: 'Pastel nhẹ nhàng', icon: Sparkles, gradient: 'from-pink-100 via-purple-100 to-blue-100', page: 'from-pink-50 via-purple-50 to-blue-50' },
-  { id: 'auto', name: 'Tự động', icon: Palette, gradient: 'from-orange-100 to-pink-100', page: 'from-orange-50/40 to-white' },
+  { id: 'light', name: 'Chế độ sáng', icon: Sun },
+  { id: 'dark', name: 'Chế độ tối', icon: Moon },
+  { id: 'auto', name: 'Tự động', icon: Sparkles },
 ];
 
 const accentColors = [
   { id: 'blue', color: 'bg-blue-400', name: 'Xanh dương', hex: '#60a5fa' },
-  { id: 'purple', color: 'bg-purple-400', name: 'Tím', hex: '#a78bfa' },
+  { id: 'purple', color: 'bg-purple-400', name: 'Tím', hex: '#c084fc' },
   { id: 'pink', color: 'bg-pink-400', name: 'Hồng', hex: '#f472b6' },
-  { id: 'green', color: 'bg-green-400', name: 'Xanh lá', hex: '#4ade80' },
   { id: 'orange', color: 'bg-orange-400', name: 'Cam', hex: '#fb923c' },
+  { id: 'green', color: 'bg-green-400', name: 'Xanh lá', hex: '#4ade80' },
+];
+
+const appIcons = [
+  { id: 'default', color: 'bg-blue-500', name: 'Mặc định' },
+  { id: 'dark', color: 'bg-gray-900', name: 'Tối giản' },
+  { id: 'pastel', color: 'bg-purple-400', name: 'Mộng mơ' },
 ];
 
 const defaultAppearance = {
   selectedTheme: 'light',
   selectedColor: 'blue',
+  selectedAppIcon: 'default',
   fontSize: 16,
   cornerRadius: 16,
   compactMode: false,
@@ -39,7 +45,6 @@ export const applyAppearanceSettings = (settings: AppearanceSettings) => {
   root.style.setProperty('--daytrack-font-size', `${settings.fontSize}px`);
   root.style.fontSize = `${settings.fontSize}px`;
   root.dataset.daytrackCompact = String(settings.compactMode);
-  // Theme (dark/light class) is handled by ThemeContext
 };
 
 export const loadAppearanceSettings = (): AppearanceSettings => {
@@ -62,7 +67,6 @@ export function Appearance() {
     setSettings(loaded);
   }, []);
 
-  // Sync selectedTheme in settings with ThemeContext
   useEffect(() => {
     setSettings(prev => ({ ...prev, selectedTheme: currentTheme }));
   }, [currentTheme]);
@@ -77,7 +81,6 @@ export function Appearance() {
 
   const updateSetting = <K extends keyof AppearanceSettings>(key: K, value: AppearanceSettings[K]) => {
     setSettings(prev => ({ ...prev, [key]: value }));
-    // Also update ThemeContext when theme selection changes
     if (key === 'selectedTheme') {
       setTheme(value as Theme);
     }
@@ -88,107 +91,134 @@ export function Appearance() {
     setTheme('light');
   };
 
-  const pageTheme = themes.find(theme => theme.id === settings.selectedTheme)?.page ?? themes[0].page;
-
   return (
-    <PageContainer className="bg-gradient-to-b from-pink-50/30 to-white dark:from-[#1A1B1E] dark:to-[#1A1B1E]" showSettings={false}>
-      <div className="sticky top-0 bg-white/80 dark:bg-[#1A1B1E]/90 backdrop-blur-lg z-10 px-6 py-6 border-b border-gray-100 dark:border-[#373A40] transition-colors">
+    <div className="min-h-screen bg-gray-50 pb-24">
+      {/* Header */}
+      <div className="sticky top-0 bg-white/80 backdrop-blur-lg px-6 py-6 border-b border-gray-100 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#373A40] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-gray-50 transition-colors"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
           </button>
           <div>
-            <h1 className="text-2xl text-gray-800 dark:text-[#E9ECEF]">Giao diện</h1>
-            <p className="text-sm text-gray-500 dark:text-[#ADB5BD]">Tùy chỉnh trải nghiệm của bạn</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-0.5">Giao diện</h1>
+            <p className="text-sm font-medium text-gray-400">Tùy chỉnh trải nghiệm của bạn</p>
           </div>
         </div>
       </div>
 
       <div className="px-6 py-6 space-y-6">
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF]">Chọn chủ đề</h3>
+        {/* Chế độ hiển thị */}
+        <div>
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Chế độ hiển thị</h3>
             <button
               onClick={resetAppearance}
-              className="p-2 rounded-xl bg-gray-100 dark:bg-[#2C2E33] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#373A40] transition-colors"
+              className="p-1.5 rounded-xl bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50 p-2 space-y-2">
             {themes.map((theme) => {
               const Icon = theme.icon;
               const isSelected = settings.selectedTheme === theme.id;
               return (
-                <motion.button
+                <button
                   key={theme.id}
                   onClick={() => updateSetting('selectedTheme', theme.id)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`relative bg-white dark:bg-[#2C2E33] rounded-2xl p-4 shadow-sm border-2 transition-all ${
-                    isSelected ? 'border-purple-400 dark:border-purple-500' : 'border-gray-100 dark:border-[#373A40]'
+                  className={`w-full flex items-center justify-between p-3 rounded-xl transition-colors border-2 ${
+                    isSelected ? 'border-blue-500 bg-blue-50' : 'border-transparent bg-gray-50 hover:bg-gray-100'
                   }`}
                 >
-                  <div className={`h-20 rounded-xl bg-gradient-to-br ${theme.gradient} mb-3 flex items-center justify-center`}>
-                    <Icon className={`w-8 h-8 ${theme.id === 'dark' ? 'text-white' : 'text-gray-700'}`} />
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-blue-500 text-white' : 'bg-white text-gray-600 shadow-sm'}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className={`font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-800'}`}>
+                      {theme.name}
+                    </span>
                   </div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-[#E9ECEF]">{theme.name}</p>
                   {isSelected && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute top-2 right-2 w-6 h-6 bg-purple-400 dark:bg-purple-500 rounded-full flex items-center justify-center"
-                    >
+                    <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mr-1">
                       <Check className="w-4 h-4 text-white" />
-                    </motion.div>
+                    </div>
                   )}
-                </motion.button>
+                </button>
               );
             })}
           </div>
-        </section>
+        </div>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Màu nhấn</h3>
-          <div className="bg-white dark:bg-[#2C2E33] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-[#373A40] transition-colors">
-            <div className="flex justify-around">
+        {/* Màu chủ đạo */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Màu chủ đạo</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-50 p-5">
+            <div className="flex flex-wrap justify-between gap-2">
               {accentColors.map((color) => {
                 const isSelected = settings.selectedColor === color.id;
                 return (
-                  <motion.button
+                  <button
                     key={color.id}
                     onClick={() => updateSetting('selectedColor', color.id)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="relative"
+                    className="flex flex-col items-center gap-2 group"
                   >
-                    <div className={`w-14 h-14 rounded-full ${color.color} shadow-lg ${
-                      isSelected ? 'ring-4 ring-offset-2 ring-gray-300' : ''
+                    <div className={`w-12 h-12 rounded-full ${color.color} flex items-center justify-center transition-all ${
+                      isSelected ? 'ring-4 ring-offset-2 ring-gray-200 scale-110' : 'hover:scale-105'
                     }`}>
-                      {isSelected && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Check className="w-6 h-6 text-white" />
-                        </div>
-                      )}
+                      {isSelected && <Check className="w-6 h-6 text-white" />}
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">{color.name}</p>
-                  </motion.button>
+                    <span className="text-xs font-semibold text-gray-500">{color.name}</span>
+                  </button>
                 );
               })}
             </div>
           </div>
-        </section>
+        </div>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Font & giao diện</h3>
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-[#2C2E33] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-[#373A40] transition-colors">
+        {/* Biểu tượng ứng dụng */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Biểu tượng ứng dụng</h3>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-50 p-5">
+            <div className="grid grid-cols-3 gap-4">
+              {appIcons.map((icon) => {
+                const isSelected = settings.selectedAppIcon === icon.id;
+                return (
+                  <button
+                    key={icon.id}
+                    onClick={() => updateSetting('selectedAppIcon', icon.id)}
+                    className={`flex flex-col items-center gap-3 p-3 rounded-2xl border-2 transition-all ${
+                      isSelected ? 'border-blue-500 bg-blue-50' : 'border-transparent hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className={`w-16 h-16 rounded-2xl ${icon.color} flex items-center justify-center shadow-md relative`}>
+                      <Logo size={32} className="text-white drop-shadow-md" />
+                      {isSelected && (
+                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center ring-2 ring-white">
+                          <Check className="w-3.5 h-3.5 text-white" />
+                        </div>
+                      )}
+                    </div>
+                    <span className={`text-xs font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-600'}`}>
+                      {icon.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Font & Bố cục */}
+        <div>
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Font & Bố cục</h3>
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50 p-4 space-y-6">
+            <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-700 dark:text-gray-300">Kích thước chữ</span>
-                <span className="text-sm text-purple-500 font-medium">{settings.fontSize}px</span>
+                <span className="font-semibold text-gray-800">Kích thước chữ</span>
+                <span className="text-sm font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md">{settings.fontSize}px</span>
               </div>
               <input
                 type="range"
@@ -196,18 +226,18 @@ export function Appearance() {
                 max="20"
                 value={settings.fontSize}
                 onChange={(e) => updateSetting('fontSize', Number(e.target.value))}
-                className="w-full h-2 bg-purple-100 rounded-full appearance-none cursor-pointer accent-purple-400"
+                className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-blue-500"
               />
-              <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-2">
+              <div className="flex justify-between text-xs font-medium text-gray-400 mt-2">
                 <span>Nhỏ</span>
                 <span>Lớn</span>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-[#2C2E33] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-[#373A40] transition-colors">
+            <div className="border-t border-gray-50 pt-4">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-gray-700 dark:text-gray-300">Độ bo góc</span>
-                <span className="text-sm text-pink-500 font-medium">{settings.cornerRadius}px</span>
+                <span className="font-semibold text-gray-800">Độ bo góc</span>
+                <span className="text-sm font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md">{settings.cornerRadius}px</span>
               </div>
               <input
                 type="range"
@@ -215,61 +245,37 @@ export function Appearance() {
                 max="24"
                 value={settings.cornerRadius}
                 onChange={(e) => updateSetting('cornerRadius', Number(e.target.value))}
-                className="w-full h-2 bg-pink-100 rounded-full appearance-none cursor-pointer accent-pink-400"
+                className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-blue-500"
               />
-              <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-2">
+              <div className="flex justify-between text-xs font-medium text-gray-400 mt-2">
                 <span>Vuông</span>
                 <span>Tròn</span>
               </div>
             </div>
-          </div>
-        </section>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Tùy chọn bố cục</h3>
-          <div className="bg-white dark:bg-[#2C2E33] rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-[#373A40] transition-colors">
-            <div className="flex items-center justify-between">
+            <div className="border-t border-gray-50 pt-4 flex items-center justify-between">
               <div>
-                <h4 className="font-medium text-gray-800 dark:text-[#E9ECEF]">Chế độ gọn</h4>
-                <p className="text-xs text-gray-500 dark:text-[#868E96] mt-0.5">Giảm khoảng cách để có thêm nội dung</p>
+                <h4 className="font-semibold text-gray-800">Chế độ gọn</h4>
+                <p className="text-xs font-medium text-gray-500 mt-0.5">Giảm khoảng cách padding</p>
               </div>
               <button
                 onClick={() => updateSetting('compactMode', !settings.compactMode)}
-                className={`relative w-12 h-7 rounded-full transition-all duration-300 ${
-                  settings.compactMode ? 'bg-gradient-to-r from-blue-400 to-purple-400' : 'bg-gray-200'
+                className={`relative w-12 h-7 rounded-full transition-colors duration-300 ${
+                  settings.compactMode ? 'bg-blue-500' : 'bg-gray-200'
                 }`}
               >
                 <motion.div
-                  animate={{ x: settings.compactMode ? 20 : 0 }}
+                  animate={{ x: settings.compactMode ? 20 : 2 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                  className="absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md"
+                  className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm"
                 />
               </button>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section>
-          <h3 className="text-lg font-medium text-gray-800 dark:text-[#E9ECEF] mb-4">Xem trước</h3>
-          <div className="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-3xl p-6 transition-colors">
-            <div
-              className={`bg-white dark:bg-[#2C2E33] shadow-sm ${settings.compactMode ? 'p-3 mb-2' : 'p-4 mb-3'} transition-colors`}
-              style={{ borderRadius: `${settings.cornerRadius}px` }}
-            >
-              <h4 className="font-medium text-gray-800 dark:text-[#E9ECEF]" style={{ fontSize: `${settings.fontSize}px` }}>
-                Văn bản mẫu
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Đây là cách ứng dụng của bạn sẽ trông như thế nào</p>
-            </div>
-            <div
-              className="h-12 shadow-lg"
-              style={{ borderRadius: `${settings.cornerRadius}px`, backgroundColor: accentColors.find(c => c.id === settings.selectedColor)?.hex }}
-            />
-          </div>
-        </section>
-
-        {savedMessage && <p className="text-center text-xs text-purple-500">{savedMessage}</p>}
+        {savedMessage && <p className="text-center text-xs font-bold text-blue-500">{savedMessage}</p>}
       </div>
-    </PageContainer>
+    </div>
   );
 }
