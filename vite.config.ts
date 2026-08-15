@@ -19,6 +19,9 @@ function figmaAssetResolver() {
 
 export default defineConfig({
   base: './',
+  build: {
+    outDir: 'docs',
+  },
   plugins: [
     figmaAssetResolver(),
     react(),
