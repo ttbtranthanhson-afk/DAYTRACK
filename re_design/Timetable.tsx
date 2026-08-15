@@ -2,9 +2,7 @@ import { Plus, Sparkles, Sun, Calendar, Trash2, ChevronDown, ChevronUp } from 'l
 import { CreateScheduleModal } from '../components/CreateScheduleModal';
 import { AIScheduleSuggestion } from '../components/AIScheduleSuggestion';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTimetable, days, dayShorts, colorMap, type ScheduleBlock } from '../hooks/useTimetable';
-
-export type { ScheduleBlock };
+import { useTimetable, days, dayShorts, colorMap } from '../hooks/useTimetable';
 
 interface TimetableProps {
   onAddTasks?: (tasks: string[], scheduleName: string, day: string) => void;
@@ -22,7 +20,6 @@ export function Timetable({ onAddTasks }: TimetableProps) {
     setExpandedScheduleId,
     todayDayIndex,
     currentDay,
-    weekDates,
     schedule,
     handleCreateSchedule,
     handleDelete,
@@ -72,7 +69,7 @@ export function Timetable({ onAddTasks }: TimetableProps) {
                 }`}>
                   <span className={`text-xs font-bold ${
                     isActive ? 'text-white' : isToday ? 'text-blue-600' : 'text-gray-600'
-                  }`}>{weekDates[i]}</span>
+                  }`}>{i + 2 <= 7 ? i + 16 : i + 16 - 7}</span>
                 </div>
               </button>
             );

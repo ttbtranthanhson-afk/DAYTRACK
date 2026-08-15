@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, Sun, Moon, Sparkles, Smartphone, Check } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
-import { useTheme } from '../contexts/ThemeContext';
 
 const themes = [
   { id: 'light', name: 'Sáng', icon: Sun, preview: 'bg-white border-gray-200', textColor: 'text-gray-900', subColor: 'text-gray-400', barColor: 'bg-blue-400' },
@@ -32,67 +31,12 @@ function Toggle({ enabled, onToggle, color = 'bg-blue-500' }: { enabled: boolean
   );
 }
 
-const defaultAppearance = {
-  selectedTheme: 'light',
-  selectedColor: 'blue',
-  fontSize: 16,
-  cornerRadius: 16,
-  compactMode: false,
-};
-
-export type AppearanceSettings = typeof defaultAppearance;
-
-const accentHexMap: Record<string, string> = {
-  blue: '#60a5fa',
-  purple: '#a78bfa',
-  pink: '#f472b6',
-  green: '#4ade80',
-  orange: '#fb923c',
-};
-
-export const applyAppearanceSettings = (settings: AppearanceSettings) => {
-  const root = document.documentElement;
-  root.style.setProperty('--daytrack-accent', accentHexMap[settings.selectedColor] ?? '#60a5fa');
-  root.style.setProperty('--daytrack-radius', `${settings.cornerRadius}px`);
-  root.style.setProperty('--daytrack-font-size', `${settings.fontSize}px`);
-  root.style.fontSize = `${settings.fontSize}px`;
-  root.dataset.daytrackCompact = String(settings.compactMode);
-};
-
-export const loadAppearanceSettings = (): AppearanceSettings => {
-  try {
-    const saved = localStorage.getItem('daytrack_appearance_settings');
-    return saved ? { ...defaultAppearance, ...JSON.parse(saved) } : defaultAppearance;
-  } catch {
-    return defaultAppearance;
-  }
-};
-
 export function Appearance() {
   const navigate = useNavigate();
-  const { setTheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState('light');
   const [selectedColor, setSelectedColor] = useState('blue');
   const [fontSize, setFontSize] = useState(16);
   const [compactMode, setCompactMode] = useState(false);
-
-  useEffect(() => {
-    const loaded = loadAppearanceSettings();
-    setSelectedTheme(loaded.selectedTheme);
-    setSelectedColor(loaded.selectedColor);
-    setFontSize(loaded.fontSize);
-    setCompactMode(loaded.compactMode);
-    setTheme(loaded.selectedTheme as 'light' | 'dark' | 'auto');
-  }, [setTheme]);
-
-  useEffect(() => {
-    const settings: AppearanceSettings = { selectedTheme, selectedColor, fontSize, cornerRadius: 16, compactMode };
-    applyAppearanceSettings(settings);
-    localStorage.setItem('daytrack_appearance_settings', JSON.stringify(settings));
-    if (selectedTheme === 'light' || selectedTheme === 'dark' || selectedTheme === 'auto') {
-      setTheme(selectedTheme);
-    }
-  }, [selectedTheme, selectedColor, fontSize, compactMode, setTheme]);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
