@@ -2,18 +2,7 @@ import { Plus, Sparkles, Sun, Calendar, Trash2, ChevronDown, ChevronUp } from 'l
 import { CreateScheduleModal } from '../components/CreateScheduleModal';
 import { AIScheduleSuggestion } from '../components/AIScheduleSuggestion';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTimetable, days, dayShorts, colorMap, type ScheduleBlock } from '../hooks/useTimetable';
-
-export type { ScheduleBlock };
-
-const colorMap: Record<string, { bg: string, text: string, badge: string, border: string }> = {
-  'bg-blue-400': { bg: 'bg-blue-50', text: 'text-blue-900', badge: 'bg-blue-400', border: 'border-blue-100' },
-  'bg-purple-400': { bg: 'bg-purple-50', text: 'text-purple-900', badge: 'bg-purple-400', border: 'border-purple-100' },
-  'bg-pink-400': { bg: 'bg-pink-50', text: 'text-pink-900', badge: 'bg-pink-400', border: 'border-pink-100' },
-  'bg-green-400': { bg: 'bg-green-50', text: 'text-green-900', badge: 'bg-green-400', border: 'border-green-100' },
-  'bg-orange-400': { bg: 'bg-orange-50', text: 'text-orange-900', badge: 'bg-orange-400', border: 'border-orange-100' },
-  'bg-yellow-400': { bg: 'bg-yellow-50', text: 'text-yellow-900', badge: 'bg-yellow-400', border: 'border-yellow-100' },
-};
+import { useTimetable, days, dayShorts, colorMap } from '../hooks/useTimetable';
 
 interface TimetableProps {
   onAddTasks?: (tasks: string[], scheduleName: string, day: string) => void;
@@ -31,7 +20,6 @@ export function Timetable({ onAddTasks }: TimetableProps) {
     setExpandedScheduleId,
     todayDayIndex,
     currentDay,
-    weekDates,
     schedule,
     handleCreateSchedule,
     handleDelete,
@@ -81,7 +69,7 @@ export function Timetable({ onAddTasks }: TimetableProps) {
                 }`}>
                   <span className={`text-xs font-bold ${
                     isActive ? 'text-white' : isToday ? 'text-blue-600' : 'text-gray-600'
-                  }`}>{weekDates[i]}</span>
+                  }`}>{i + 2 <= 7 ? i + 16 : i + 16 - 7}</span>
                 </div>
               </button>
             );
