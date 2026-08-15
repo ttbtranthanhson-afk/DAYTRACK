@@ -29,11 +29,6 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
   );
 }
 
-const defaultSchedule = {
-  morning: '08:00',
-  summary: '21:00',
-};
-
 export function Notifications() {
   const navigate = useNavigate();
 

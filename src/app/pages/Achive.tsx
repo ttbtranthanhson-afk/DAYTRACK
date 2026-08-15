@@ -27,11 +27,6 @@ export function Achive() {
             <p className="text-xs text-gray-500 mt-0.5">Tiếp tục phát huy! Bạn đang làm rất tốt.</p>
           </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">{totalCompleted} / {totalAchievements}</h2>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-0.5">Thành tựu đã mở khóa</p>
-        </div>
-      </div>
 
         {/* Achievement groups */}
         <div className="px-5 space-y-px">
@@ -64,8 +59,7 @@ export function Achive() {
                       }
                     </div>
                   </div>
-                </div>
-              </button>
+                </button>
 
                 <AnimatePresence>
                   {isExpanded && (

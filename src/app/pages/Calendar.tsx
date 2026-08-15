@@ -45,7 +45,6 @@ export function Calendar({ onAddTasks }: CalendarProps) {
             </div>
           </div>
         </div>
-      </div>
 
         {/* Weekday headers */}
         <div className="grid grid-cols-7 px-5 mt-4 mb-1">

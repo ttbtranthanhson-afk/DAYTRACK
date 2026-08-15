@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useTasks, priorityConfig } from '../hooks/useTasks';
 import type { Task } from '../hooks/useTasks';
 
-const priorityOrder: Task['priority'][] = ['high', 'medium', 'low'];
-
 interface TasksProps {
   tasks: Task[];
   onUpdateTasks: (tasks: Task[]) => void;
@@ -27,35 +25,6 @@ export function Tasks({ tasks: propTasks, onUpdateTasks }: TasksProps) {
     toggleTask,
     handleAddTask,
   } = useTasks({ tasks: propTasks, onUpdateTasks });
-
-  const getWeekDays = () => {
-    const today = new Date();
-    const dayIndex = today.getDay(); // 0 is Sunday, 1 is Monday
-    const diff = today.getDate() - dayIndex + (dayIndex === 0 ? -6 : 1);
-    const monday = new Date(today.setDate(diff));
-    
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      const isToday = d.getDate() === new Date().getDate() && d.getMonth() === new Date().getMonth();
-      const shortName = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'][d.getDay()];
-      days.push({
-        date: d,
-        dayNumber: d.getDate(),
-        shortName,
-        isToday
-      });
-    }
-    return days;
-  };
-
-  const weekDays = getWeekDays();
-  const todayStr = new Intl.DateTimeFormat('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit' }).format(new Date());
-
-  // Group tasks
-  const groupedTasks: Record<string, Task[]> = { high: [], medium: [], low: [] };
-  filteredTasks.forEach(t => groupedTasks[t.priority].push(t));
 
   return (
     <div className="min-h-screen bg-white pb-28">
