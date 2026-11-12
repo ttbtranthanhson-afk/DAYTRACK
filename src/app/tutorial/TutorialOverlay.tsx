@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { GraduationCap, ArrowRight, X } from 'lucide-react';
 import type { TutorialStep } from './tutorialSteps';
+import { tourSafeBounds } from './tourOccluders';
 
 interface TutorialOverlayProps {
   step: TutorialStep;
@@ -58,16 +59,19 @@ export function TutorialOverlay({
     const left = Math.max(12, Math.min(rect!.left + rect!.width / 2 - panelW / 2, w - panelW - 12));
     const gap = PAD + 8;
     const est = panelH || 200;
-    const spaceBelow = h - rect!.bottom - gap;
-    const spaceAbove = rect!.top - gap;
+    const bounds = tourSafeBounds(h);
+    const minTop = bounds.top + 8;
+    const maxTop = bounds.bottom - est - 8;
+    const roomBelow = bounds.bottom - 8 - rect!.bottom - gap;
+    const roomAbove = rect!.top - gap - (bounds.top + 8);
     let top: number;
-    if (spaceBelow >= est) top = rect!.bottom + gap;
-    else if (spaceAbove >= est) top = rect!.top - gap - est;
+    if (roomBelow >= est) top = rect!.bottom + gap;
+    else if (roomAbove >= est) top = rect!.top - gap - est;
     else {
       // No side fits the full panel on a short screen: pick the roomier side
-      // but keep the panel entirely on-screen.
-      const guess = spaceBelow >= spaceAbove ? rect!.bottom + gap : rect!.top - gap - est;
-      top = Math.max(8, Math.min(guess, h - est - 8));
+      // but keep the panel inside the un-occluded area as much as possible.
+      const guess = roomBelow >= roomAbove ? rect!.bottom + gap : rect!.top - gap - est;
+      top = Math.max(minTop, Math.min(guess, maxTop));
     }
     panelStyle = { left, top };
   }

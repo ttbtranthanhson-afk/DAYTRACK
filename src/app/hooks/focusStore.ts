@@ -521,7 +521,7 @@ if (typeof window !== 'undefined') {
 
   window.setInterval(() => setState({ clockNow: Date.now() }), 30000);
 
-  window.addEventListener('nav:quick-action', () => toggleTimer());
+  window.addEventListener('nav:focus-action', () => toggleTimer());
 
   window.addEventListener('focus:auto-start', (e: Event) => {
     consumePendingFocus();

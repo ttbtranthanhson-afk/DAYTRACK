@@ -1,3 +1,5 @@
+import { tourSafeBounds } from './tourOccluders';
+
 const EDGE = 8;
 
 function isScroller(el: HTMLElement): boolean {
@@ -7,11 +9,12 @@ function isScroller(el: HTMLElement): boolean {
 }
 
 /**
- * Bring a tour target into the viewport, scrolling the scrollable container
- * that actually holds it (modal card, inner list) and finally the document —
- * so the spotlight points at the real element, not empty space.
+ * Bring a tour target into the visible, un-occluded area, scrolling the
+ * scrollable container that actually holds it (modal card, inner list) and
+ * finally the document — so the spotlight points at the real element, not
+ * empty space or a spot hidden behind the bottom nav.
  *
- * Only scrolls when the target is (partly) outside the viewport; if it is
+ * Only scrolls when the target is (partly) outside that area; if it is
  * already fully visible this is a no-op, keeping the tour calm and stable.
  * Returns true when a scroll was applied.
  */
@@ -20,13 +23,20 @@ export function scrollTourTargetIntoView(el: HTMLElement): boolean {
   if (rect.width === 0 && rect.height === 0) return false;
 
   const vh = window.innerHeight;
-  const fits = rect.height <= vh - EDGE * 2;
+  const { top: safeTop, bottom: safeBottom } = tourSafeBounds(vh, el);
+  const avail = safeBottom - safeTop;
+  if (avail <= 16) return false;
 
-  // Already fully visible (or, if taller than the screen, its top is).
-  if (fits && rect.top >= EDGE && rect.bottom <= vh - EDGE) return false;
-  if (!fits && rect.top >= EDGE) return false;
+  const fits = rect.height <= avail;
 
-  const desiredTop = fits ? Math.max(EDGE, (vh - rect.height) / 2) : EDGE;
+  if (fits) {
+    if (rect.top >= safeTop && rect.bottom <= safeBottom) return false;
+  } else if (rect.top >= safeTop && rect.top <= safeBottom - 24) {
+    // Taller than the free area: showing its top is good enough.
+    return false;
+  }
+
+  const desiredTop = fits ? safeTop + (avail - rect.height) / 2 : safeTop;
   const need = rect.top - desiredTop;
   if (Math.abs(need) < 1) return false;
 

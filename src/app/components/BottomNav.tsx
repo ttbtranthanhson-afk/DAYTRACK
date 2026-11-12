@@ -38,13 +38,17 @@ export function BottomNav() {
     el.scrollTo({ left: target, behavior: 'smooth' });
   }, [activePath]);
 
-  const fireAction = () =>
-    window.dispatchEvent(new CustomEvent('nav:quick-action'));
+  // The focus page's action is the timer triangle: it starts/pauses the timer
+  // instead of opening a create modal. Other pages use the create action.
+  const fireAction = () => {
+    const event = activePath === '/focus' ? 'nav:focus-action' : 'nav:quick-action';
+    window.dispatchEvent(new CustomEvent(event));
+  };
 
   const ActionIcon = action ? action.icon : Plus;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-3 pb-4 pointer-events-none">
+    <div data-tour-occluder className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-3 pb-4 pointer-events-none">
       <div className="pointer-events-auto w-full max-w-md flex items-center gap-2.5">
 
         {/* ── Left: 4-visible scrollable nav card ── */}

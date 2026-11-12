@@ -27,6 +27,7 @@ import { days, type ScheduleTask } from './hooks/scheduleData';
 import { recordVisit, syncAchievementStats } from './hooks/achievementStats';
 import type { BlockType } from '../../shared/ai';
 import { TutorialLayer } from './tutorial/TutorialLayer';
+import { cleanupTutorialSampleData } from './tutorial/tutorialData';
 import {
   activateAccount,
   clearActiveAccount,
@@ -111,6 +112,9 @@ function AppContent() {
 
   const handleLogin = (data: UserData) => {
     activateAccount(data.email);
+    // The newly activated account might carry tutorial sample data from a
+    // tour that was never finished.
+    cleanupTutorialSampleData();
 
     const savedUserData = getAccountItem(USER_DATA_KEY);
     let profile = data;

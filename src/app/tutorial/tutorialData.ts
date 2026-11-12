@@ -1,5 +1,10 @@
 import { days, type ScheduleBlock } from '../hooks/scheduleData';
-import { getAccountItem, setAccountItem, refreshStores } from '../hooks/accountStorage';
+import {
+  getAccountItem,
+  setAccountItem,
+  removeAccountItem,
+  refreshStores,
+} from '../hooks/accountStorage';
 
 const WEEKDAY_KEY = 'daytrack_weekday_schedules';
 const CALENDAR_KEY = 'daytrack_calendar_schedules';
@@ -8,6 +13,9 @@ const BUSY_KEY = 'daytrack_busy_hours';
 const TASKS_KEY = 'daytrack_tasks';
 const ACHIEVEMENTS_KEY = 'daytrack_achievements';
 const STATS_KEY = 'daytrack_achievement_stats';
+// Persisted copy of the pre-tour data. It survives reloads so sample data can
+// always be undone, even when the tour is abandoned instead of finished.
+const BACKUP_KEY = 'daytrack_tutorial_backup';
 
 const DATA_REFRESH_EVENT = 'daytrack:data-refresh';
 
@@ -99,10 +107,19 @@ export function refreshTutorialData(): void {
 
 export function seedTutorialData(): void {
   if (snapshot) return;
+  // A previous run that never finished (page reload mid-tour) can leave its
+  // sample data behind; undo that first so we never snapshot sample data as
+  // if it were the user's real data.
+  const stranded = readBackup();
+  if (stranded) {
+    applySnapshot(stranded);
+    removeAccountItem(BACKUP_KEY);
+  }
   snapshot = {};
   for (const key of SEED_KEYS) {
     snapshot[key] = getAccountItem(key);
   }
+  setAccountItem(BACKUP_KEY, JSON.stringify(snapshot));
   const values = sampleValues();
   for (const key of SEED_KEYS) {
     setAccountItem(key, values[key]);
@@ -110,15 +127,40 @@ export function seedTutorialData(): void {
   refreshTutorialData();
 }
 
-export function restoreTutorialData(): void {
-  if (!snapshot) return;
+function readBackup(): Record<string, string | null> | null {
+  try {
+    const raw = getAccountItem(BACKUP_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    return parsed && typeof parsed === 'object'
+      ? (parsed as Record<string, string | null>)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function applySnapshot(snap: Record<string, string | null>): void {
   for (const key of SEED_KEYS) {
-    const original = snapshot[key];
-    if (original !== null) setAccountItem(key, original);
+    const original = snap[key];
+    if (original !== null && original !== undefined) setAccountItem(key, original);
     else setAccountItem(key, blankValue(key));
   }
+}
+
+export function restoreTutorialData(): void {
+  const snap = snapshot ?? readBackup();
+  if (!snap) return;
+  applySnapshot(snap);
   snapshot = null;
+  removeAccountItem(BACKUP_KEY);
   refreshTutorialData();
+}
+
+// Called on app start (and right after login): if the tour was left midway,
+// put the user's real data back so sample schedules never outlive the tour.
+export function cleanupTutorialSampleData(): void {
+  if (readBackup()) restoreTutorialData();
 }
 
 export function clearTutorialDataIfActive(): void {
